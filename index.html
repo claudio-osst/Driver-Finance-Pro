@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>DriverFinance Pro</title>
+    <meta name="description" content="Controle de faturamento e despesas para motoristas de app.">
+    <meta name="theme-color" content="#00ff88">
+    <link rel="icon" href="/driverfinance/icon-192.png">
+    <link rel="manifest" href="/driverfinance/manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --font-size-small: 0.875rem;
+            --font-size-medium: 1rem;
+            --font-size-large: 1.125rem;
+            --font-size-extra-large: 1.25rem;
+            --font-size-xx-large: 1.5rem;
+            --font-size-xxx-large: 1.75rem;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            -webkit-user-select: none;
+            user-select: none;
+            font-size: var(--font-size-medium); /* Default */
+        }
+
+        body[data-font-size="small"] {
+            font-size: var(--font-size-small);
+        }
+
+        body[data-font-size="medium"] {
+            font-size: var(--font-size-medium);
+        }
+
+        body[data-font-size="large"] {
+            font-size: var(--font-size-large);
+        }
+
+        body[data-font-size="extra-large"] {
+            font-size: var(--font-size-extra-large);
+        }
+
+        body[data-font-size="xx-large"] {
+            font-size: var(--font-size-xx-large);
+        }
+
+        body[data-font-size="xxx-large"] {
+            font-size: var(--font-size-xxx-large);
+        }
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --card-bg: #252525;
+            --border: #444444;
+            --accent: #00ff88;
+            --accent-light: #33ffaa;
+            --accent-lighter: #66ffbb;
+            --accent-lightest: #99ffcc;
+        }
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --card-bg: #ffffff;
+            --border: #e0e0e0;
+            --accent: #007bff;
+            --accent-light: #4d9bff;
+            --accent-lighter: #80b3ff;
+            --accent-lightest: #b3ccff;
+        }
+        [data-theme="blue"] {
+            --bg-primary: #0d1b2a;
+            --bg-secondary: #1b263b;
+            --text-primary: #e0e1dd;
+            --text-secondary: #a9b4c2;
+            --card-bg: #16213e;
+            --border: #3a506b;
+            --accent: #58a6ff;
+            --accent-light: #7bb8ff;
+            --accent-lighter: #9ecaff;
+            --accent-lightest: #c1dcff;
+        }
+        [data-theme="green"] {
+            --bg-primary: #0f1f0f;
+            --bg-secondary: #1f2f1f;
+            --text-primary: #d4edda;
+            --text-secondary: #a9c3b0;
+            --card-bg: #1e3e1e;
+            --border: #406040;
+            --accent: #28a745;
+            --accent-light: #4fb966;
+            --accent-lighter: #76cb87;
+            --accent-lightest: #9ddca8;
+        }
+        [data-theme="orange"] {
+            --bg-primary: #2c1f0f;
+            --bg-secondary: #3d2a1a;
+            --text-primary: #f8e6e6;
+            --text-secondary: #d4b8a0;
+            --card-bg: #3c2f2f;
+            --border: #5c4a3a;
+            --accent: #fd7e14;
+            --accent-light: #fe9743;
+            --accent-lighter: #feb072;
+            --accent-lightest: #ffcaa1;
+        }
+        [data-theme="purple"] {
+            --bg-primary: #1a0f2f;
+            --bg-secondary: #2a1f3f;
+            --text-primary: #e2d9f3;
+            --text-secondary: #c0b3d6;
+            --card-bg: #2f1f4f;
+            --border: #4a395f;
+            --accent: #6f42c1;
+            --accent-light: #8b64d1;
+            --accent-lighter: #a786e1;
+            --accent-lightest: #c3a8f1;
+        }
+        header {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        header h1 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+        nav button {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        nav button:hover, nav button.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+        section {
+            display: none;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        section.active {
+            display: block;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: bold;
+        }
+        form input, form select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-appearance: none;
+        }
+        button {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button.danger {
+            background: #ff4444;
+            color: var(--bg-primary);
+        }
+        ul {
+            list-style: none;
+        }
+        li {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+        }
+        canvas {
+            max-width: 100%;
+            height: 300px;
+        }
+        progress {
+            width: 100%;
+            height: 20px;
+        }
+        .meta-diaria, .meta-planejamento {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+            .meta-diaria input, .meta-planejamento input {
+                width: 150px;
+                margin: 0 10px;
+                color: var(--text-primary);
+                font-size: 2.5rem; /* Aumenta o tamanho da fonte */
+                font-weight: bold; /* Deixa a fonte em negrito */
+                text-align: center; /* Centraliza o texto */
+            }
+        .meta-diaria progress {
+            margin-top: 10px;
+        }
+        .card p.dia { font-size: 1.5rem; color: var(--accent); }
+        .card p.sem { font-size: 1.3rem; color: var(--accent-light); }
+        .card p.mes { font-size: 1.1rem; color: var(--accent-lighter); }
+        .card p.ano { font-size: 0.9rem; color: var(--accent-lightest); }
+        #metaNotification {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            cursor: pointer;
+        }
+        #metaNotification.show {
+            display: block;
+        }
+        .filter-container {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .filter-container select, .filter-container input[type="date"] {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        input[type="range"] {
+            width: 100%;
+            margin: 0.5rem 0;
+            accent-color: var(--accent);
+        }
+        .meta-planejamento output {
+            display: inline-block;
+            margin-left: 0.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            nav {
+                flex-wrap: wrap;
+            }
+            .meta-diaria input, .meta-planejamento input {
+                width: 100%;
+                margin: 10px 0;
+            }
+            nav button {
+                flex: 1;
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+            .filter-container {
+                flex-direction: column;
+            }
+        }
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 1rem;
+            }
+            button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    
+        .ajuste-btn {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.2rem 0.6rem;
+            margin: 0 0.3rem;
+            border-radius: 4px;
+        }
+    
+
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .range-container input[type="range"] {
+            flex: 1;
+        }
+        .ajuste-btn {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.2rem 0.6rem;
+            margin: 0;
+            border-radius: 4px;
+        }
+    
+</style>
+</head>
+<body data-theme="dark">
+    <header>
+        <h1>DriverFinance Pro</h1>
+        <p>Controle avançado de faturamento e despesas para motoristas de app</p>
+        <select id="themeSelector">
+            <option value="dark">Escuro</option>
+            <option value="light">Claro</option>
+            <option value="blue">Azul Profundo</option>
+            <option value="green">Verde Suave</option>
+            <option value="orange">Laranja Vibrante</option>
+            <option value="purple">Roxo Noturno</option>
+        </select>
+    </header>
+
+    <nav>
+        <button onclick="showSection('painel')" class="active">Painel</button>
+        <button onclick="showSection('transacoes')">Transações</button>
+        <button onclick="showSection('estatisticas')">Estatísticas</button>
+        <button onclick="showSection('configuracoes')">Configurações</button>
+    </nav>
+
+    <main>
+        <!-- Painel -->
+        <section id="painel" class="active">
+            <div id="metaNotification">Parabéns! Meta diária atingida!</div>
+            <div class="meta-diaria">
+                <h2>Meta Diária Líquida</h2>
+                <label>Meta (R$): <input type="number" id="metaDiaria" step="0.01" min="0" value="0.00"></label>
+                <progress id="progressoMeta" value="0" max="100"></progress>
+                <p id="progressoTexto">0.0% atingido</p>
+            </div>
+            <div class="meta-planejamento">
+                <h2>Planejamento de Meta</h2>
+                <label>Faturamento Mínimo por KM (R$): <div class="range-container"><button type="button" class="ajuste-btn" onclick="ajustarRange('metaPorKm', -0.1)">-</button><input type="range" id="metaPorKm" min="0.5" max="10" step="0.1" value="2"><button type="button" class="ajuste-btn" onclick="ajustarRange('metaPorKm', 0.1)">+</button></div><output id="metaPorKmValor">R$ 2.00</output></label>
+                <label>Faturamento Mínimo por Hora (R$): <div class="range-container"><button type="button" class="ajuste-btn" onclick="ajustarRange('metaPorHora', -1)">-</button><input type="range" id="metaPorHora" min="5" max="100" step="1" value="30"><button type="button" class="ajuste-btn" onclick="ajustarRange('metaPorHora', 1)">+</button></div><output id="metaPorHoraValor">R$ 30.00</output></label>
+                <p>Para atingir a meta diária:</p>
+                <p>Kilômetros necessários: <span id="kmNecessarios">0.0</span></p>
+                <p>Horas necessárias: <span id="horasNecessarias">0.0</span></p>
+                <p>Corridas necessárias (estimado): <span id="corridasNecessarias">0</span></p>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h2>Ganhos</h2>
+                    <p class="dia">Dia: <span id="ganhosHoje">R$ 0.00</span></p>
+                    <p class="sem">Sem.: <span id="ganhosSemana">R$ 0.00</span></p>
+                    <p class="mes">Mês: <span id="ganhosMes">R$ 0.00</span></p>
+                    <p class="ano">Ano: <span id="ganhosAno">R$ 0.00</span></p>
+                </div>
+                <div class="card">
+                    <h2>Despesas</h2>
+                    <p class="dia">Dia: <span id="despesasHoje">R$ 0.00</span></p>
+                    <p class="sem">Sem.: <span id="despesasSemana">R$ 0.00</span></p>
+                    <p class="mes">Mês: <span id="despesasMes">R$ 0.00</span></p>
+                    <p class="ano">Ano: <span id="despesasAno">R$ 0.00</span></p>
+                </div>
+                <div class="card">
+                    <h2>Lucro Líquido</h2>
+                    <p class="dia">Dia: <span id="lucroHoje">R$ 0.00</span></p>
+                    <p class="sem">Sem.: <span id="lucroSemana">R$ 0.00</span></p>
+                    <p class="mes">Mês: <span id="lucroMes">R$ 0.00</span></p>
+                    <p class="ano">Ano: <span id="lucroAno">R$ 0.00</span></p>
+                </div>
+                <div class="card">
+                    <h2>Média por Viagem</h2>
+                    <p class="dia">Dia: <span id="mediaViagemHoje">R$ 0.00</span></p>
+                    <p class="sem">Sem.: <span id="mediaViagemSemana">R$ 0.00</span></p>
+                    <p class="mes">Mês: <span id="mediaViagemMes">R$ 0.00</span></p>
+                    <p class="ano">Ano: <span id="mediaViagemAno">R$ 0.00</span></p>
+                </div>
+                <div class="card">
+                    <h2>Total de Corridas</h2>
+                    <p class="dia">Dia: <span id="corridasHoje">0</span></p>
+                    <p class="sem">Sem.: <span id="corridasSemana">0</span></p>
+                    <p class="mes">Mês: <span id="corridasMes">0</span></p>
+                    <p class="ano">Ano: <span id="corridasAno">0</span></p>
+                </div>
+                <div class="card">
+                    <h2>Faturamento/Hora</h2>
+                    <p class="dia">Dia: <span id="faturamentoHoraHoje">R$ 0.00</span></p>
+                    <p class="sem">Sem.: <span id="faturamentoHoraSemana">R$ 0.00</span></p>
+                    <p class="mes">Mês: <span id="faturamentoHoraMes">R$ 0.00</span></p>
+                    <p class="ano">Ano: <span id="faturamentoHoraAno">R$ 0.00</span></p>
+                </div>
+                <div class="card">
+                    <h2>Faturamento/KM</h2>
+                    <p class="dia">Dia: <span id="faturamentoKmHoje">R$ 0.00</span></p>
+                    <p class="sem">Sem.: <span id="faturamentoKmSemana">R$ 0.00</span></p>
+                    <p class="mes">Mês: <span id="faturamentoKmMes">R$ 0.00</span></p>
+                    <p class="ano">Ano: <span id="faturamentoKmAno">R$ 0.00</span></p>
+                </div>
+                <div class="card">
+                    <h2>Margem de Lucro</h2>
+                    <p class="dia">Dia: <span id="margemLucroHoje">0.0%</span></p>
+                    <p class="sem">Sem.: <span id="margemLucroSemana">0.0%</span></p>
+                    <p class="mes">Mês: <span id="margemLucroMes">0.0%</span></p>
+                    <p class="ano">Ano: <span id="margemLucroAno">0.0%</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transações -->
+        <section id="transacoes">
+            <div class="card">
+                <h2>Adicionar Transação</h2>
+                <form id="transacaoForm">
+                    <h3 style="color: var(--accent);">Faturamento</h3>
+                    <div class="grid">
+                        <div>
+                            <label>Uber (R$): <input type="number" id="uber" step="0.01" min="0" value="0.00"></label>
+                            <label>99 (R$): <input type="number" id="noventaenove" step="0.01" min="0" value="0.00"></label>
+                            <label>InDrive (R$): <input type="number" id="indrive" step="0.01" min="0" value="0.00"></label>
+                            <label>Particular/Outros (R$): <input type="number" id="particular" step="0.01" min="0" value="0.00"></label>
+                        </div>
+                        <div>
+                            <label>Quilometragem (KM): <input type="number" id="quilometragem" min="0" value="0"></label>
+                            <label>Total de Corridas: <input type="number" id="totalCorridas" min="0" value="0"></label>
+                            <label>Horas Trabalhadas: <input type="number" id="horasTrabalhadas" step="0.1" min="0" value="0.0"></label>
+                        </div>
+                    </div>
+                    <h3 style="color: var(--accent);">Despesas</h3>
+                    <div class="grid">
+                        <div>
+                            <label>Combustível:</label>
+                            <select id="combustivelTipo">
+                                <option value="gasolina">Gasolina</option>
+                                <option value="etanol">Etanol</option>
+                                <option value="gnv">GNV</option>
+                            </select>
+                            <label>Valor (R$): <input type="number" id="combustivelValor" step="0.01" min="0" value="0.00"></label>
+                        </div>
+                        <div>
+                            <label>Aluguel do Carro (R$): <input type="number" id="aluguel" step="0.01" min="0" value="0.00"></label>
+                            <label>Alimentação (R$): <input type="number" id="alimentacao" step="0.01" min="0" value="0.00"></label>
+                            <label>Outros (R$): <input type="number" id="outros" step="0.01" min="0" value="0.00"></label>
+                        </div>
+                    </div>
+                    <button type="button" onclick="adicionarTransacao()">Adicionar Transação</button>
+                    <button type="button" onclick="limparForm()">Limpar</button>
+                </form>
+            </div>
+            <div class="card">
+                <h2>Histórico Recente (Últimos 10)</h2>
+                <ul id="historicoList"></ul>
+            </div>
+        </section>
+
+        <!-- Estatísticas -->
+        <section id="estatisticas">
+            <div class="card">
+                <h2>Filtro de Período</h2>
+                <div class="filter-container">
+                    <select id="periodFilter">
+                        <option value="all">Tudo</option>
+                        <option value="today">Hoje</option>
+                        <option value="last7days">Últimos 7 Dias</option>
+                        <option value="last30days">Últimos 30 Dias</option>
+                        <option value="currentMonth">Mês Atual</option>
+                        <option value="currentYear">Ano Atual</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                    <div id="customDateRange" style="display: none;">
+                        <label>Início: <input type="date" id="dateStart"></label>
+                        <label>Fim: <input type="date" id="dateEnd"></label>
+                        <button type="button" onclick="applyCustomFilter()">Aplicar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Distribuição de Ganhos</h2>
+                <canvas id="ganhosChart"></canvas>
+            </div>
+            <div class="card">
+                <h2>Despesas por Categoria</h2>
+                <canvas id="despesasChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Configurações -->
+                <section id="configuracoes">
+            <div class="card">
+                <h2>Ajustes de Fonte</h2>
+                <label for="fontSizeSlider">Tamanho da Fonte: <span id="fontSizeValue">Médio</span></label>
+                <input type="range" id="fontSizeSlider" min="0" max="5" value="1" step="1">
+            </div>
+            <div class="card">
+                <h2>Exportar/Importar</h2>
+                <button type="button" onclick="exportarJSON()">Exportar JSON</button>
+                <button type="button" onclick="exportarCSV()">Exportar CSV</button>
+                <button type="button" onclick="exportarPDF()">Exportar PDF</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+                <button type="button" onclick="document.getElementById('importFile').click();">Importar JSON</button>
+                <select id="importMode">
+                    <option value="merge">Mesclar</option>
+                    <option value="replace">Substituir</option>
+                </select>
+                <button type="button" onclick="importarJSON()">Confirmar Importar</button>
+            </div>
+            <div class="card">
+                <h2>Backup e Limpeza</h2>
+                <button type="button" onclick="downloadBackup()">Download Backup JSON</button>
+                <button type="button" class="danger" onclick="apagarTudo()">Apagar Todos os Dados</button>
+            </div>
+            <p>Instale como PWA para uso offline (requer HTTPS).</p>
+        </section>
+
+        <footer style="text-align: center; padding: 1rem; background: var(--bg-secondary); border-top: 1px solid var(--border);">
+            <p>Dados salvos localmente via localStorage. Sempre faça backup!</p>
+            <p>DriverFinance Pro | desenvolvido por Claudio Gomes | Todos os direitos reservados.</p>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+function ajustarRange(id, delta) {
+    const input = document.getElementById(id);
+    let novoValor = parseFloat(input.value) + delta;
+    if (novoValor < parseFloat(input.min)) novoValor = parseFloat(input.min);
+    if (novoValor > parseFloat(input.max)) novoValor = parseFloat(input.max);
+    input.value = novoValor.toFixed(input.step.includes('.') ? 1 : 0);
+    input.dispatchEvent(new Event('input'));
+}
+
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+function ajustarRange(id, delta) {
+    const input = document.getElementById(id);
+    let novoValor = parseFloat(input.value) + delta;
+    if (novoValor < parseFloat(input.min)) novoValor = parseFloat(input.min);
+    if (novoValor > parseFloat(input.max)) novoValor = parseFloat(input.max);
+    input.value = novoValor.toFixed(input.step.includes('.') ? 1 : 0);
+    input.dispatchEvent(new Event('input'));
+}
+
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js">
+function ajustarRange(id, delta) {
+    const input = document.getElementById(id);
+    let novoValor = parseFloat(input.value) + delta;
+    if (novoValor < parseFloat(input.min)) novoValor = parseFloat(input.min);
+    if (novoValor > parseFloat(input.max)) novoValor = parseFloat(input.max);
+    input.value = novoValor.toFixed(input.step.includes('.') ? 1 : 0);
+    input.dispatchEvent(new Event('input'));
+}
+
+</script>
+    <script>
+        // Estado global
+        let transacoes = JSON.parse(localStorage.getItem('transacoesDF')) || [];
+        let charts = {};
+        let metaDiaria = parseFloat(localStorage.getItem('metaDiariaDF')) || 0.00;
+        let metaPorKm = parseFloat(localStorage.getItem('metaPorKmDF')) || 2.00;
+        let metaPorHora = parseFloat(localStorage.getItem('metaPorHoraDF')) || 30.00;
+
+        // Inicialização
+        window.addEventListener('load', () => {
+            aplicarTema();
+            document.getElementById('themeSelector').addEventListener('change', (e) => {
+                document.body.dataset.theme = e.target.value;
+                localStorage.setItem('temaDF', e.target.value);
+                aplicarTema();
+                atualizarEstatisticas();
+            });
+            const savedTheme = localStorage.getItem('temaDF') || 'dark';
+            document.getElementById('themeSelector').value = savedTheme;
+            document.body.dataset.theme = savedTheme;
+            document.getElementById('metaDiaria').value = metaDiaria.toFixed(2);
+            document.getElementById('metaPorKm').value = metaPorKm;
+            document.getElementById('metaPorHora').value = metaPorHora;
+            document.getElementById('metaPorKmValor').textContent = `R$ ${metaPorKm.toFixed(2)}`;
+            document.getElementById('metaPorHoraValor').textContent = `R$ ${metaPorHora.toFixed(2)}`;
+            document.getElementById('periodFilter').addEventListener('change', (e) => {
+                document.getElementById('customDateRange').style.display = e.target.value === 'custom' ? 'flex' : 'none';
+                if (e.target.value !== 'custom') {
+                    inicializarGraficos();
+                }
+            });
+            document.getElementById('metaPorKm').addEventListener('input', (e) => {
+                metaPorKm = parseFloat(e.target.value);
+                localStorage.setItem('metaPorKmDF', metaPorKm);
+                document.getElementById('metaPorKmValor').textContent = `R$ ${metaPorKm.toFixed(2)}`;
+                atualizarPlanejamentoMeta();
+            });
+            document.getElementById('metaPorHora').addEventListener('input', (e) => {
+                metaPorHora = parseFloat(e.target.value);
+                localStorage.setItem('metaPorHoraDF', metaPorHora);
+                document.getElementById('metaPorHoraValor').textContent = `R$ ${metaPorHora.toFixed(2)}`;
+                atualizarPlanejamentoMeta();
+            });
+            document.getElementById("metaDiaria").addEventListener("input", atualizarPlanejamentoMeta);
+
+            // Lógica para o controle deslizante de tamanho de fonte
+            const fontSizeSlider = document.getElementById("fontSizeSlider");
+            const fontSizeValueSpan = document.getElementById("fontSizeValue");
+            const fontSizeMap = ["small", "medium", "large", "extra-large", "xx-large", "xxx-large"];
+            const fontSizeTextMap = ["Pequeno", "Médio", "Grande", "Extra Grande", "Extra Extra Grande", "Extra Extra Extra Grande"];
+
+            function updateFontSize(value) {
+                const size = fontSizeMap[value];
+                const text = fontSizeTextMap[value];
+                document.body.dataset.fontSize = size;
+                localStorage.setItem("fontSizeDF", size);
+                fontSizeValueSpan.textContent = text;
+            }
+
+            fontSizeSlider.addEventListener("input", (e) => {
+                updateFontSize(parseInt(e.target.value));
+            });
+
+            const savedFontSize = localStorage.getItem("fontSizeDF") || "medium";
+            const savedFontSizeIndex = fontSizeMap.indexOf(savedFontSize);
+            fontSizeSlider.value = savedFontSizeIndex !== -1 ? savedFontSizeIndex : 1; // Default to medium if not found
+            updateFontSize(parseInt(fontSizeSlider.value));
+
+            atualizarTudo();
+            showSection("painel");
+        });
+
+        function aplicarTema() {
+            const theme = document.body.dataset.theme;
+            document.querySelectorAll('.card, .meta-diaria, .meta-planejamento, nav, header, footer').forEach(el => {
+                el.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary');
+                el.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border');
+            });
+            document.querySelectorAll('input, select').forEach(el => {
+                el.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary');
+                el.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-primary');
+                el.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border');
+            });
+            // Ajuste específico para o input da Meta Diária Líquida em temas escuros
+            const metaDiariaInput = document.getElementById('metaDiaria');
+            if (metaDiariaInput) {
+                const currentTheme = document.body.dataset.theme;
+                if (currentTheme === 'dark' || currentTheme === 'blue' || currentTheme === 'green' || currentTheme === 'orange' || currentTheme === 'purple') {
+                    metaDiariaInput.style.color = '#000000'; // Cor preta para melhor visibilidade
+                    metaDiariaInput.style.fontWeight = 'bold'; // Negrito para destaque
+                }
+            }
+            document.querySelectorAll('button').forEach(el => {
+                if (!el.classList.contains('danger')) {
+                    el.style.background = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+                    el.style.color = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary');
+                } else {
+                    el.style.color = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary');
+                }
+            });
+            document.querySelectorAll('.card p.dia').forEach(el => {
+                el.style.color = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+            });
+            document.querySelectorAll('.card p.sem').forEach(el => {
+                el.style.color = getComputedStyle(document.documentElement).getPropertyValue('--accent-light');
+            });
+            document.querySelectorAll('.card p.mes').forEach(el => {
+                el.style.color = getComputedStyle(document.documentElement).getPropertyValue('--accent-lighter');
+            });
+            document.querySelectorAll('.card p.ano').forEach(el => {
+                el.style.color = getComputedStyle(document.documentElement).getPropertyValue('--accent-lightest');
+            });
+            document.querySelectorAll('.meta-planejamento output').forEach(el => {
+                el.style.color = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+            });
+        }
+
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            document.querySelector(`nav button[onclick="showSection('${id}')"]`).classList.add('active');
+            if (id === 'painel') atualizarPainel();
+            if (id === 'transacoes') atualizarHistorico();
+            if (id === 'estatisticas') inicializarGraficos();
+        }
+
+        // Painel
+        function atualizarPainel() {
+            const periodos = {
+                hoje: { inicio: new Date().toDateString(), nome: 'Dia' },
+                semana: { inicio: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), nome: 'Sem.' },
+                mes: { inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 1), nome: 'Mês' },
+                ano: { inicio: new Date(new Date().getFullYear(), 0, 1), nome: 'Ano' }
+            };
+
+            Object.keys(periodos).forEach(periodo => {
+                const filtro = transacoes.filter(t => {
+                    const transacaoData = new Date(t.data);
+                    if (periodo === 'hoje') {
+                        return transacaoData.toDateString() === new Date().toDateString();
+                    }
+                    return transacaoData >= new Date(periodos[periodo].inicio);
+                });
+                const ganhos = filtro.reduce((sum, t) => sum + t.ganhosTotal, 0);
+                const despesas = filtro.reduce((sum, t) => sum + t.despesasTotal, 0);
+                const lucro = ganhos - despesas;
+                const numViagens = filtro.reduce((sum, t) => sum + t.totalCorridas, 0);
+                const horasTrabalhadas = filtro.reduce((sum, t) => sum + t.horasTrabalhadas, 0);
+                const quilometragem = filtro.reduce((sum, t) => sum + t.quilometragem, 0);
+                const mediaViagem = numViagens > 0 ? (ganhos / numViagens) : 0;
+                const faturamentoHora = horasTrabalhadas > 0 ? (ganhos / horasTrabalhadas) : 0;
+                const faturamentoKm = quilometragem > 0 ? (ganhos / quilometragem) : 0;
+                const margemLucro = ganhos > 0 ? ((lucro / ganhos) * 100) : 0;
+
+                document.getElementById(`ganhos${periodo.charAt(0).toUpperCase() + periodo.slice(1)}`).textContent = `R$ ${ganhos.toFixed(2)}`;
+                document.getElementById(`despesas${periodo.charAt(0).toUpperCase() + periodo.slice(1)}`).textContent = `R$ ${despesas.toFixed(2)}`;
+                document.getElementById(`lucro${periodo.charAt(0).toUpperCase() + periodo.slice(1)}`).textContent = `R$ ${lucro.toFixed(2)}`;
+                document.getElementById(`mediaViagem${periodo.charAt(0).toUpperCase() + periodo.slice(1)}`).textContent = `R$ ${mediaViagem.toFixed(2)}`;
+                document.getElementById(`corridas${periodo.charAt(0).toUpperCase() + periodo.slice(1)}`).textContent = numViagens;
+                document.getElementById(`faturamentoHora${periodo.charAt(0).toUpperCase() + periodo.slice(1)}`).textContent = `R$ ${faturamentoHora.toFixed(2)}`;
+                document.getElementById(`faturamentoKm${periodo.charAt(0).toUpperCase() + periodo.slice(1)}`).textContent = `R$ ${faturamentoKm.toFixed(2)}`;
+                document.getElementById(`margemLucro${periodo.charAt(0).toUpperCase() + periodo.slice(1)}`).textContent = `${margemLucro.toFixed(1)}%`;
+            });
+
+            atualizarMetaDiaria();
+            atualizarPlanejamentoMeta();
+        }
+
+        function atualizarMetaDiaria() {
+            metaDiaria = parseFloat(document.getElementById('metaDiaria').value) || 0.00;
+            localStorage.setItem('metaDiariaDF', metaDiaria);
+            const hoje = new Date().toDateString();
+            const filtroHoje = transacoes.filter(t => new Date(t.data).toDateString() === hoje);
+            const ganhosHoje = filtroHoje.reduce((sum, t) => sum + t.ganhosTotal, 0);
+            const despesasHoje = filtroHoje.reduce((sum, t) => sum + t.despesasTotal, 0);
+            const lucroHoje = ganhosHoje - despesasHoje;
+            const percentual = metaDiaria > 0 ? Math.min((lucroHoje / metaDiaria) * 100, 100) : 0;
+            document.getElementById('progressoMeta').value = percentual;
+            document.getElementById('progressoTexto').textContent = `${percentual.toFixed(1)}% atingido (R$ ${lucroHoje.toFixed(2)} / R$ ${metaDiaria.toFixed(2)})`;
+
+            // Notificação de Meta Atingida
+            const metaNotification = document.getElementById('metaNotification');
+            if (percentual >= 100 && !metaNotification.classList.contains('show')) {
+                metaNotification.classList.add('show');
+                setTimeout(() => metaNotification.classList.remove('show'), 5000);
+                metaNotification.onclick = () => metaNotification.classList.remove('show');
+            }
+        }
+
+        function atualizarPlanejamentoMeta() {
+            const metaDiaria = parseFloat(document.getElementById('metaDiaria').value) || 0.00;
+            const metaPorKm = parseFloat(document.getElementById('metaPorKm').value) || 2.00;
+            const metaPorHora = parseFloat(document.getElementById('metaPorHora').value) || 30.00;
+
+            // Calcular médias baseadas nas últimas 30 transações
+            const ultimasTransacoes = transacoes.slice(0, 30);
+            const totalCorridas = ultimasTransacoes.reduce((sum, t) => sum + t.totalCorridas, 0);
+            const totalKm = ultimasTransacoes.reduce((sum, t) => sum + t.quilometragem, 0);
+            const totalHoras = ultimasTransacoes.reduce((sum, t) => sum + t.horasTrabalhadas, 0);
+            const mediaKmPorCorrida = totalCorridas > 0 ? totalKm / totalCorridas : 10.0; // Default: 10 km/corrida
+            const mediaHorasPorCorrida = totalCorridas > 0 ? totalHoras / totalCorridas : 0.5; // Default: 0.5 h/corrida
+
+            // Calcular quilômetros e horas necessários
+            const kmNecessarios = metaDiaria > 0 && metaPorKm > 0 ? metaDiaria / metaPorKm : 0.0;
+            const horasNecessarias = metaDiaria > 0 && metaPorHora > 0 ? metaDiaria / metaPorHora : 0.0;
+            const corridasNecessarias = Math.max(
+                kmNecessarios > 0 && mediaKmPorCorrida > 0 ? Math.ceil(kmNecessarios / mediaKmPorCorrida) : 0,
+                horasNecessarias > 0 && mediaHorasPorCorrida > 0 ? Math.ceil(horasNecessarias / mediaHorasPorCorrida) : 0
+            );
+
+            document.getElementById('kmNecessarios').textContent = kmNecessarios.toFixed(1);
+            document.getElementById('horasNecessarias').textContent = horasNecessarias.toFixed(1);
+            document.getElementById('corridasNecessarias').textContent = corridasNecessarias;
+        }
+
+        // Transações
+        function adicionarTransacao() {
+            const novaTransacao = {
+                data: new Date().toISOString(),
+                uber: parseFloat(document.getElementById('uber').value) || 0.00,
+                noventaenove: parseFloat(document.getElementById('noventaenove').value) || 0.00,
+                indrive: parseFloat(document.getElementById('indrive').value) || 0.00,
+                particular: parseFloat(document.getElementById('particular').value) || 0.00,
+                quilometragem: parseFloat(document.getElementById('quilometragem').value) || 0,
+                totalCorridas: parseInt(document.getElementById('totalCorridas').value) || 0,
+                horasTrabalhadas: parseFloat(document.getElementById('horasTrabalhadas').value) || 0.0,
+                combustivel: { tipo: document.getElementById('combustivelTipo').value, valor: parseFloat(document.getElementById('combustivelValor').value) || 0.00 },
+                aluguel: parseFloat(document.getElementById('aluguel').value) || 0.00,
+                alimentacao: parseFloat(document.getElementById('alimentacao').value) || 0.00,
+                outros: parseFloat(document.getElementById('outros').value) || 0.00,
+                ganhosTotal: 0.00,
+                despesasTotal: 0.00
+            };
+            novaTransacao.ganhosTotal = novaTransacao.uber + novaTransacao.noventaenove + novaTransacao.indrive + novaTransacao.particular;
+            novaTransacao.despesasTotal = novaTransacao.combustivel.valor + novaTransacao.aluguel + novaTransacao.alimentacao + novaTransacao.outros;
+
+            transacoes.unshift(novaTransacao);
+            localStorage.setItem('transacoesDF', JSON.stringify(transacoes));
+            limparForm();
+            atualizarTudo();
+            alert('Transação adicionada com sucesso!');
+        }
+
+        function limparForm() {
+            document.getElementById('transacaoForm').reset();
+        }
+
+        function excluirTransacao(index) {
+            if (confirm('Tem certeza que deseja excluir esta transação?')) {
+                transacoes.splice(index, 1);
+                localStorage.setItem('transacoesDF', JSON.stringify(transacoes));
+                atualizarTudo();
+                alert('Transação excluída com sucesso!');
+            }
+        }
+
+        function atualizarHistorico() {
+            const list = document.getElementById('historicoList');
+            list.innerHTML = '';
+            transacoes.slice(0, 10).forEach((t, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${new Date(t.data).toLocaleString('pt-BR')}</strong> | Ganhos: R$ ${t.ganhosTotal.toFixed(2)} | Despesas: R$ ${t.despesasTotal.toFixed(2)} | Lucro: R$ ${(t.ganhosTotal - t.despesasTotal).toFixed(2)} | KM: ${t.quilometragem} | Corridas: ${t.totalCorridas} | Horas: ${t.horasTrabalhadas.toFixed(1)}`;
+                const btnExcluir = document.createElement('button');
+                btnExcluir.textContent = 'Excluir';
+                btnExcluir.className = 'danger';
+                btnExcluir.onclick = () => excluirTransacao(index);
+                li.appendChild(btnExcluir);
+                list.appendChild(li);
+            });
+        }
+
+        // Estatísticas
+        function getFilteredTransactions() {
+            const period = document.getElementById('periodFilter').value;
+            const dateStart = document.getElementById('dateStart').value ? new Date(document.getElementById('dateStart').value) : null;
+            const dateEnd = document.getElementById('dateEnd').value ? new Date(document.getElementById('dateEnd').value) : null;
+            const today = new Date();
+
+            if (period === 'custom' && dateStart && dateEnd) {
+                return transacoes.filter(t => {
+                    const transacaoData = new Date(t.data);
+                    return transacaoData >= dateStart && transacaoData <= new Date(dateEnd.getTime() + 24 * 60 * 60 * 1000 - 1);
+                });
+            }
+
+            const periodos = {
+                all: { inicio: new Date(0) },
+                today: { inicio: today.toDateString() },
+                last7days: { inicio: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000) },
+                last30days: { inicio: new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000) },
+                currentMonth: { inicio: new Date(today.getFullYear(), today.getMonth(), 1) },
+                currentYear: { inicio: new Date(today.getFullYear(), 0, 1) }
+            };
+
+            if (period in periodos) {
+                return transacoes.filter(t => {
+                    const transacaoData = new Date(t.data);
+                    if (period === 'today') {
+                        return transacaoData.toDateString() === today.toDateString();
+                    }
+                    return transacaoData >= periodos[period].inicio;
+                });
+            }
+            return transacoes;
+        }
+
+        function inicializarGraficos() {
+            if (charts.ganhos) charts.ganhos.destroy();
+            if (charts.despesas) charts.despesas.destroy();
+
+            const filteredTransacoes = getFilteredTransactions();
+
+            const ctxGanhos = document.getElementById('ganhosChart').getContext('2d');
+            charts.ganhos = new Chart(ctxGanhos, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Uber', '99', 'InDrive', 'Particular/Outros'],
+                    datasets: [{
+                        data: [
+                            filteredTransacoes.reduce((sum, t) => sum + t.uber, 0),
+                            filteredTransacoes.reduce((sum, t) => sum + t.noventaenove, 0),
+                            filteredTransacoes.reduce((sum, t) => sum + t.indrive, 0),
+                            filteredTransacoes.reduce((sum, t) => sum + t.particular, 0)
+                        ],
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary') } } } }
+            });
+
+            const ctxDespesas = document.getElementById('despesasChart').getContext('2d');
+            charts.despesas = new Chart(ctxDespesas, {
+                type: 'bar',
+                data: {
+                    labels: ['Combustível', 'Aluguel', 'Alimentação', 'Outros'],
+                    datasets: [{
+                        data: [
+                            filteredTransacoes.reduce((sum, t) => sum + t.combustivel.valor, 0),
+                            filteredTransacoes.reduce((sum, t) => sum + t.aluguel, 0),
+                            filteredTransacoes.reduce((sum, t) => sum + t.alimentacao, 0),
+                            filteredTransacoes.reduce((sum, t) => sum + t.outros, 0)
+                        ],
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary') } } }, plugins: { legend: { labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary') } } } }
+            });
+        }
+
+        function applyCustomFilter() {
+            const dateStart = document.getElementById('dateStart').value;
+            const dateEnd = document.getElementById('dateEnd').value;
+            if (dateStart && dateEnd && new Date(dateStart) <= new Date(dateEnd)) {
+                inicializarGraficos();
+            } else {
+                alert('Selecione datas válidas (início antes ou igual ao fim).');
+            }
+        }
+
+        function atualizarEstatisticas() {
+            if (document.getElementById('estatisticas').classList.contains('active')) {
+                inicializarGraficos();
+            }
+        }
+
+        // Configurações
+        function getThemeColor() {
+            return getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        }
+
+        function exportarJSON() {
+            const dados = { transacoes, metaDiaria, metaPorKm, metaPorHora };
+            downloadFile(JSON.stringify(dados, null, 2), 'driverfinance.json', 'application/json');
+        }
+
+        function exportarCSV() {
+            let csv = 'Data,Uber,99,InDrive,Particular,Ganhos Total,Combustível,Aluguel,Alimentação,Outros,Despesas Total,Lucro,Horas Trabalhadas,Quilometragem,Total de Corridas\n';
+            transacoes.forEach(t => {
+                csv += `${t.data},R$ ${t.uber.toFixed(2)},R$ ${t.noventaenove.toFixed(2)},R$ ${t.indrive.toFixed(2)},R$ ${t.particular.toFixed(2)},R$ ${t.ganhosTotal.toFixed(2)},${t.combustivel.tipo} (R$ ${t.combustivel.valor.toFixed(2)}),R$ ${t.aluguel.toFixed(2)},R$ ${t.alimentacao.toFixed(2)},R$ ${t.outros.toFixed(2)},R$ ${t.despesasTotal.toFixed(2)},R$ ${(t.ganhosTotal - t.despesasTotal).toFixed(2)},${t.horasTrabalhadas.toFixed(1)},${t.quilometragem},${t.totalCorridas}\n`;
+            });
+            downloadFile(csv, 'driverfinance.csv', 'text/csv');
+        }
+
+        function exportarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const margin = 10;
+            const themeColor = getThemeColor();
+            const today = new Date().toLocaleDateString('pt-BR');
+
+            // Cabeçalho
+            doc.setFontSize(18);
+            doc.setTextColor(themeColor);
+            doc.text('Relatório DriverFinance Pro', margin, 20);
+            doc.setFontSize(12);
+            doc.setTextColor(0);
+            doc.text(`Gerado em: ${today} | Tema: ${document.getElementById('themeSelector').value}`, margin, 30);
+
+            // Resumo Geral
+            doc.setFontSize(14);
+            doc.setTextColor(themeColor);
+            doc.text('Resumo Geral', margin, 40);
+            doc.setFontSize(10);
+            doc.setTextColor(0);
+
+            const periodos = {
+                hoje: { inicio: new Date().toDateString(), nome: 'Dia' },
+                semana: { inicio: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), nome: 'Sem.' },
+                mes: { inicio: new Date(new Date().getFullYear(), new Date().getMonth(), 1), nome: 'Mês' },
+                ano: { inicio: new Date(new Date().getFullYear(), 0, 1), nome: 'Ano' }
+            };
+
+            let y = 50;
+            Object.keys(periodos).forEach(periodo => {
+                const filtro = transacoes.filter(t => {
+                    const transacaoData = new Date(t.data);
+                    if (periodo === 'hoje') {
+                        return transacaoData.toDateString() === new Date().toDateString();
+                    }
+                    return transacaoData >= new Date(periodos[periodo].inicio);
+                });
+                const ganhos = filtro.reduce((sum, t) => sum + t.ganhosTotal, 0);
+                const despesas = filtro.reduce((sum, t) => sum + t.despesasTotal, 0);
+                const lucro = ganhos - despesas;
+                const numViagens = filtro.reduce((sum, t) => sum + t.totalCorridas, 0);
+                const horasTrabalhadas = filtro.reduce((sum, t) => sum + t.horasTrabalhadas, 0);
+                const quilometragem = filtro.reduce((sum, t) => sum + t.quilometragem, 0);
+                const mediaViagem = numViagens > 0 ? (ganhos / numViagens) : 0;
+                const faturamentoHora = horasTrabalhadas > 0 ? (ganhos / horasTrabalhadas) : 0;
+                const faturamentoKm = quilometragem > 0 ? (ganhos / quilometragem) : 0;
+                const margemLucro = ganhos > 0 ? ((lucro / ganhos) * 100) : 0;
+
+                doc.text(`${periodos[periodo].nome}:`, margin, y);
+                y += 5;
+                doc.text(`Ganhos: R$ ${ganhos.toFixed(2)}`, margin + 5, y);
+                doc.text(`Despesas: R$ ${despesas.toFixed(2)}`, margin + 5, y + 5);
+                doc.text(`Lucro Líquido: R$ ${lucro.toFixed(2)}`, margin + 5, y + 10);
+                doc.text(`Média por Viagem: R$ ${mediaViagem.toFixed(2)}`, margin + 5, y + 15);
+                doc.text(`Total de Corridas: ${numViagens}`, margin + 5, y + 20);
+                doc.text(`Faturamento/Hora: R$ ${faturamentoHora.toFixed(2)}`, margin + 5, y + 25);
+                doc.text(`Faturamento/KM: R$ ${faturamentoKm.toFixed(2)}`, margin + 5, y + 30);
+                doc.text(`Margem de Lucro: ${margemLucro.toFixed(1)}%`, margin + 5, y + 35);
+                y += 45;
+                if (y > 260) { doc.addPage(); y = 20; }
+            });
+
+            // Planejamento de Meta
+            doc.setFontSize(14);
+            doc.setTextColor(themeColor);
+            doc.text('Planejamento de Meta', margin, y);
+            doc.setFontSize(10);
+            doc.setTextColor(0);
+            y += 10;
+            const ultimasTransacoes = transacoes.slice(0, 30);
+            const totalCorridas = ultimasTransacoes.reduce((sum, t) => sum + t.totalCorridas, 0);
+            const totalKm = ultimasTransacoes.reduce((sum, t) => sum + t.quilometragem, 0);
+            const totalHoras = ultimasTransacoes.reduce((sum, t) => sum + t.horasTrabalhadas, 0);
+            const mediaKmPorCorrida = totalCorridas > 0 ? totalKm / totalCorridas : 10.0;
+            const mediaHorasPorCorrida = totalCorridas > 0 ? totalHoras / totalCorridas : 0.5;
+            const kmNecessarios = metaDiaria > 0 && metaPorKm > 0 ? metaDiaria / metaPorKm : 0.0;
+            const horasNecessarias = metaDiaria > 0 && metaPorHora > 0 ? metaDiaria / metaPorHora : 0.0;
+            const corridasNecessarias = Math.max(
+                kmNecessarios > 0 && mediaKmPorCorrida > 0 ? Math.ceil(kmNecessarios / mediaKmPorCorrida) : 0,
+                horasNecessarias > 0 && mediaHorasPorCorrida > 0 ? Math.ceil(horasNecessarias / mediaHorasPorCorrida) : 0
+            );
+            doc.text(`Meta Diária: R$ ${metaDiaria.toFixed(2)}`, margin, y);
+            doc.text(`Faturamento Mínimo por KM: R$ ${metaPorKm.toFixed(2)}`, margin, y + 5);
+            doc.text(`Faturamento Mínimo por Hora: R$ ${metaPorHora.toFixed(2)}`, margin, y + 10);
+            doc.text(`KM Necessários: ${kmNecessarios.toFixed(1)}`, margin, y + 15);
+            doc.text(`Horas Necessárias: ${horasNecessarias.toFixed(1)}`, margin, y + 20);
+            doc.text(`Corridas Necessárias (estimado): ${corridasNecessarias}`, margin, y + 25);
+            y += 35;
+            if (y > 260) { doc.addPage(); y = 20; }
+
+            // Meta Diária Líquida
+            doc.setFontSize(14);
+            doc.setTextColor(themeColor);
+            doc.text('Meta Diária Líquida', margin, y);
+            doc.setFontSize(10);
+            doc.setTextColor(0);
+            y += 10;
+            const filtroHoje = transacoes.filter(t => new Date(t.data).toDateString() === new Date().toDateString());
+            const ganhosHoje = filtroHoje.reduce((sum, t) => sum + t.ganhosTotal, 0);
+            const despesasHoje = filtroHoje.reduce((sum, t) => sum + t.despesasTotal, 0);
+            const lucroHoje = ganhosHoje - despesasHoje;
+            const percentual = metaDiaria > 0 ? Math.min((lucroHoje / metaDiaria) * 100, 100) : 0;
+            doc.text(`Meta: R$ ${metaDiaria.toFixed(2)}`, margin, y);
+            doc.text(`Lucro Líquido Hoje: R$ ${lucroHoje.toFixed(2)}`, margin, y + 5);
+            doc.text(`Progresso: ${percentual.toFixed(1)}%`, margin, y + 10);
+            y += 20;
+            if (y > 260) { doc.addPage(); y = 20; }
+
+            // Histórico de Transações
+            doc.setFontSize(14);
+            doc.setTextColor(themeColor);
+            doc.text('Histórico de Transações', margin, y);
+            y += 10;
+            doc.autoTable({
+                startY: y,
+                head: [['Data', 'Uber', '99', 'InDrive', 'Particular', 'Ganhos Total', 'Combustível', 'Aluguel', 'Alimentação', 'Outros', 'Despesas Total', 'Lucro', 'Horas', 'KM', 'Corridas']],
+                body: transacoes.map(t => [
+                    new Date(t.data).toLocaleString('pt-BR'),
+                    `R$ ${t.uber.toFixed(2)}`,
+                    `R$ ${t.noventaenove.toFixed(2)}`,
+                    `R$ ${t.indrive.toFixed(2)}`,
+                    `R$ ${t.particular.toFixed(2)}`,
+                    `R$ ${t.ganhosTotal.toFixed(2)}`,
+                    `${t.combustivel.tipo} (R$ ${t.combustivel.valor.toFixed(2)})`,
+                    `R$ ${t.aluguel.toFixed(2)}`,
+                    `R$ ${t.alimentacao.toFixed(2)}`,
+                    `R$ ${t.outros.toFixed(2)}`,
+                    `R$ ${t.despesasTotal.toFixed(2)}`,
+                    `R$ ${(t.ganhosTotal - t.despesasTotal).toFixed(2)}`,
+                    `${t.horasTrabalhadas.toFixed(1)}`,
+                    `${t.quilometragem}`,
+                    `${t.totalCorridas}`
+                ]),
+                theme: 'grid',
+                headStyles: { fillColor: themeColor },
+                styles: { fontSize: 8, cellPadding: 2 },
+                columnStyles: {
+                    0: { cellWidth: 30 },
+                    6: { cellWidth: 20 },
+                    12: { cellWidth: 10 },
+                    13: { cellWidth: 10 },
+                    14: { cellWidth: 10 }
+                }
+            });
+            y = doc.lastAutoTable.finalY + 10;
+            if (y > 260) { doc.addPage(); y = 20; }
+
+            // Resumo por Categoria
+            doc.setFontSize(14);
+            doc.setTextColor(themeColor);
+            doc.text('Resumo por Categoria', margin, y);
+            y += 10;
+            doc.autoTable({
+                startY: y,
+                head: [['Categoria', 'Total']],
+                body: [
+                    ['Ganhos Uber', `R$ ${transacoes.reduce((sum, t) => sum + t.uber, 0).toFixed(2)}`],
+                    ['Ganhos 99', `R$ ${transacoes.reduce((sum, t) => sum + t.noventaenove, 0).toFixed(2)}`],
+                    ['Ganhos InDrive', `R$ ${transacoes.reduce((sum, t) => sum + t.indrive, 0).toFixed(2)}`],
+                    ['Ganhos Particular/Outros', `R$ ${transacoes.reduce((sum, t) => sum + t.particular, 0).toFixed(2)}`],
+                    ['Despesas Combustível', `R$ ${transacoes.reduce((sum, t) => sum + t.combustivel.valor, 0).toFixed(2)}`],
+                    ['Despesas Aluguel', `R$ ${transacoes.reduce((sum, t) => sum + t.aluguel, 0).toFixed(2)}`],
+                    ['Despesas Alimentação', `R$ ${transacoes.reduce((sum, t) => sum + t.alimentacao, 0).toFixed(2)}`],
+                    ['Despesas Outros', `R$ ${transacoes.reduce((sum, t) => sum + t.outros, 0).toFixed(2)}`]
+                ],
+                theme: 'grid',
+                headStyles: { fillColor: themeColor },
+                styles: { fontSize: 8, cellPadding: 2 }
+            });
+
+            doc.save('driverfinance_relatorio.pdf');
+        }
+
+        function importarJSON() {
+            const file = document.getElementById('importFile').files[0];
+            if (!file) return alert('Selecione um arquivo JSON.');
+            const mode = document.getElementById('importMode').value;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const dados = JSON.parse(e.target.result);
+                    if (mode === 'replace') {
+                        transacoes = dados.transacoes || [];
+                        metaDiaria = dados.metaDiaria || 0.00;
+                        metaPorKm = dados.metaPorKm || 2.00;
+                        metaPorHora = dados.metaPorHora || 30.00;
+                    } else {
+                        transacoes = [...transacoes, ...(dados.transacoes || [])];
+                        metaDiaria = dados.metaDiaria || metaDiaria;
+                        metaPorKm = dados.metaPorKm || metaPorKm;
+                        metaPorHora = dados.metaPorHora || metaPorHora;
+                    }
+                    localStorage.setItem('transacoesDF', JSON.stringify(transacoes));
+                    localStorage.setItem('metaDiariaDF', metaDiaria);
+                    localStorage.setItem('metaPorKmDF', metaPorKm);
+                    localStorage.setItem('metaPorHoraDF', metaPorHora);
+                    document.getElementById('metaDiaria').value = metaDiaria.toFixed(2);
+                    document.getElementById('metaPorKm').value = metaPorKm;
+                    document.getElementById('metaPorHora').value = metaPorHora;
+                    document.getElementById('metaPorKmValor').textContent = `R$ ${metaPorKm.toFixed(2)}`;
+                    document.getElementById('metaPorHoraValor').textContent = `R$ ${metaPorHora.toFixed(2)}`;
+                    atualizarTudo();
+                    alert('Importado com sucesso!');
+                } catch (err) {
+                    alert('Erro ao importar: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function downloadBackup() {
+            exportarJSON();
+        }
+
+        function apagarTudo() {
+            if (confirm('ATENÇÃO: Isso apagará TODOS os dados. Confirma?')) {
+                localStorage.clear();
+                transacoes = [];
+                metaDiaria = 0.00;
+                metaPorKm = 2.00;
+                metaPorHora = 30.00;
+                document.getElementById('metaDiaria').value = '0.00';
+                document.getElementById('metaPorKm').value = metaPorKm;
+                document.getElementById('metaPorHora').value = metaPorHora;
+                document.getElementById('metaPorKmValor').textContent = `R$ ${metaPorKm.toFixed(2)}`;
+                document.getElementById('metaPorHoraValor').textContent = `R$ ${metaPorHora.toFixed(2)}`;
+                atualizarTudo();
+                alert('Dados apagados.');
+            }
+        }
+
+        function downloadFile(content, filename, mime) {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function atualizarTudo() {
+            atualizarPainel();
+            atualizarHistorico();
+            atualizarEstatisticas();
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/driverfinance/sw.js').catch((err) => console.error('Service Worker Error:', err));
+        }
+    
+function ajustarRange(id, delta) {
+    const input = document.getElementById(id);
+    let novoValor = parseFloat(input.value) + delta;
+    if (novoValor < parseFloat(input.min)) novoValor = parseFloat(input.min);
+    if (novoValor > parseFloat(input.max)) novoValor = parseFloat(input.max);
+    input.value = novoValor.toFixed(input.step.includes('.') ? 1 : 0);
+    input.dispatchEvent(new Event('input'));
+}
+
+</script>
+</body>
+</html>
