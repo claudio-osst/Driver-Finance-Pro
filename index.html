@@ -44,12 +44,12 @@
 	<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 	<script>
 		const firebaseConfig = {
-			apiKey: "======confidencial======",
-            authDomain: "======confidencial======",
-            projectId: "======confidencial======",
-            storageBucket: "======confidencial======",
-            messagingSenderId: "======confidencial======",
-            appId: "======confidencial======"
+			apiKey: "========confidencial=========",
+            authDomain: "========confidencial=========",
+            projectId: "========confidencial=========",
+            storageBucket: "========confidencial=========",
+            messagingSenderId: "========confidencial=========",
+            appId: "========confidencial========="
 		};
 		firebase.initializeApp(firebaseConfig);
 	</script>
@@ -1422,8 +1422,7 @@
         </section>
 
         <footer style="text-align: center; padding: 1rem; background: var(--bg-secondary); border-top: 1px solid var(--border);">
-            <p>Dados salvos localmente via localStorage. Sempre faça backup!</p>
-            <p>DriverFinance Pro | desenvolvido por Claudio Gomes | Todos os direitos reservados.</p>
+            <p>DriverFinance Pro | desenvolvido por Claudio Gomes</p>
         </footer>
     </main>
 
@@ -1495,15 +1494,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
     <script>
         // Estado global - ATUALIZADO COM NOVAS VARIÁVEIS
-        let transacoes = JSON.parse(localStorage.getItem('transacoesDF')) || [];
+        let transacoes = []; // TODO: Migrar para appStorage
         let charts = {};
-        let metaDiaria = parseFloat(localStorage.getItem('metaDiariaDF')) || 400.00;
-        let metaPorKm = parseFloat(localStorage.getItem('metaPorKmDF')) || 2.00;
-        let metaPorHora = parseFloat(localStorage.getItem('metaPorHoraDF')) || 50.00;
-        let metaSemanal = parseFloat(localStorage.getItem('metaSemanalDF')) || 1500.00;
-        let metaMensal = parseFloat(localStorage.getItem('metaMensalDF')) || 6000.00;
-        let customApps = JSON.parse(localStorage.getItem('customAppsDF')) || [];
-        let customExpenses = JSON.parse(localStorage.getItem('customExpensesDF')) || [];
+        let metaDiaria = 400.00; // TODO: Migrar para appStorage
+        let metaPorKm = 2.00; // TODO: Migrar para appStorage
+        let metaPorHora = 50.00; // TODO: Migrar para appStorage
+        let metaSemanal = 1500.00; // TODO: Migrar para appStorage
+        let metaMensal = 6000.00; // TODO: Migrar para appStorage
+        let customApps = []; // TODO: Migrar para appStorage
+		let customExpenses = []; // TODO: Migrar para appStorage
         let currentCalendarMonth = new Date().getMonth();
         let currentCalendarYear = new Date().getFullYear();
         let selectedDate = null;
@@ -1512,7 +1511,7 @@
 		// Inicialização
 		window.addEventListener('load', () => {
 			// Configurações de tema e fonte (mantidas iguais)
-			const savedTheme = localStorage.getItem('temaDF') || 'dark';
+			const savedTheme = 'dark'; // TODO: Migrar para appStorage
 			document.body.dataset.theme = savedTheme;
 			aplicarTema();
 
@@ -1520,7 +1519,7 @@
 				button.addEventListener('click', () => {
 					const theme = button.dataset.theme;
 					document.body.dataset.theme = theme;
-					localStorage.setItem('temaDF', theme);
+					// REMOVA COMPLETAMENTE ESTA LINHA
 					document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
 					button.classList.add('active');
 					aplicarTema();
@@ -1534,7 +1533,7 @@
 
 			const fontSizeMap = ["small", "medium", "large", "extra-large", "xx-large", "xxx-large"];
 			const fontSizeTextMap = ["Pequeno", "Médio", "Grande", "Extra Grande", "Extra Extra Grande", "Extra Extra Extra Grande"];
-			const savedFontSize = localStorage.getItem("fontSizeDF") || "medium";
+			const savedFontSize = "medium"; // TODO: Migrar para appStorage
 			const savedFontSizeIndex = fontSizeMap.indexOf(savedFontSize);
 			const fontSizeSlider = document.getElementById("fontSizeSlider");
 			const fontSizeValueSpan = document.getElementById("fontSizeValue");
@@ -1544,7 +1543,7 @@
 					const size = fontSizeMap[value];
 					const text = fontSizeTextMap[value];
 					document.body.dataset.fontSize = size;
-					localStorage.setItem("fontSizeDF", size);
+					// REMOVA COMPLETAMENTE ESTA LINHA
 					fontSizeValueSpan.textContent = text;
 				}
 				updateFontSize(parseInt(fontSizeSlider.value));
@@ -1587,7 +1586,7 @@
             }
 
 			// Login automático
-			if (localStorage.getItem('logadoDF') === 'true') {
+			if (false) { // TODO: Migrar para appStorage
 				const loginScreen = document.getElementById('loginScreen');
 				if (loginScreen) loginScreen.remove();
 				showSection("painel");
@@ -1618,7 +1617,6 @@
             }
             
             customApps.push(nomeApp);
-            localStorage.setItem('customAppsDF', JSON.stringify(customApps));
             input.value = '';
             atualizarListaAppsPersonalizados();
             atualizarInputsApps();
@@ -1627,7 +1625,6 @@
 
         function removerAppPersonalizado(nomeApp) {
             customApps = customApps.filter(app => app !== nomeApp);
-            localStorage.setItem('customAppsDF', JSON.stringify(customApps));
             atualizarListaAppsPersonalizados();
             atualizarInputsApps();
             mostrarNotificacao(`App "${nomeApp}" removido`);
@@ -1680,7 +1677,6 @@
             }
             
             customExpenses.push(nomeDespesa);
-            localStorage.setItem('customExpensesDF', JSON.stringify(customExpenses));
             input.value = '';
             atualizarListaDespesasPersonalizadas();
             atualizarInputsDespesas();
@@ -1689,7 +1685,6 @@
 
         function removerDespesaPersonalizada(nomeDespesa) {
             customExpenses = customExpenses.filter(despesa => despesa !== nomeDespesa);
-            localStorage.setItem('customExpensesDF', JSON.stringify(customExpenses));
             atualizarListaDespesasPersonalizadas();
             atualizarInputsDespesas();
             mostrarNotificacao(`Despesa "${nomeDespesa}" removida`);
@@ -1729,7 +1724,7 @@
 
         function salvarMetaDiaria() {
             metaDiaria = parseFloat(document.getElementById('metaDiaria').value) || 0;
-            localStorage.setItem('metaDiariaDF', metaDiaria);
+            // REMOVA COMPLETAMENTE ESTA LINHA
             calcularPlanejamento();
             atualizarProgressoMetas();
         }
@@ -1738,9 +1733,6 @@
             // Salvar valores
             metaPorKm = parseFloat(document.getElementById('metaPorKm').value) || 2.00;
             metaPorHora = parseFloat(document.getElementById('metaPorHora').value) || 50;
-            
-            localStorage.setItem('metaPorKmDF', metaPorKm);
-            localStorage.setItem('metaPorHoraDF', metaPorHora);
             
             // Calcular necessidades baseadas na meta diária
             const kmNecessarios = metaDiaria > 0 && metaPorKm > 0 ? metaDiaria / metaPorKm : 0.0;
@@ -1769,13 +1761,11 @@
         // Metas Semanais e Mensais
         function salvarMetaSemanal() {
             metaSemanal = parseFloat(document.getElementById('metaSemanal').value) || 0;
-            localStorage.setItem('metaSemanalDF', metaSemanal);
             atualizarProgressoMetas();
         }
 
         function salvarMetaMensal() {
             metaMensal = parseFloat(document.getElementById('metaMensal').value) || 0;
-            localStorage.setItem('metaMensalDF', metaMensal);
             atualizarProgressoMetas();
         }
 
@@ -2049,7 +2039,6 @@
             });
 
             transacoes.unshift(novaTransacao);
-            localStorage.setItem('transacoesDF', JSON.stringify(transacoes));
             limparForm();
             atualizarTudo();
             mostrarNotificacao('Transação adicionada com sucesso!');
@@ -2084,7 +2073,6 @@
         function excluirTransacao(index) {
             mostrarConfirmacao('Tem certeza que deseja excluir esta transação?', () => {
                 transacoes.splice(index, 1);
-                localStorage.setItem('transacoesDF', JSON.stringify(transacoes));
                 atualizarTudo();
                 mostrarNotificacao('Transação excluída com sucesso!');
             });
@@ -2397,7 +2385,6 @@
             });
             
             transacoes[editingIndex] = transacaoEditada;
-            localStorage.setItem('transacoesDF', JSON.stringify(transacoes));
             
             fecharModalEdicao();
             atualizarTudo();
@@ -2867,14 +2854,9 @@
                         customApps = [...new Set([...customApps, ...(dados.customApps || [])])];
                         customExpenses = [...new Set([...customExpenses, ...(dados.customExpenses || [])])];
                     }
-                    localStorage.setItem('transacoesDF', JSON.stringify(transacoes));
-                    localStorage.setItem('metaDiariaDF', metaDiaria);
-                    localStorage.setItem('metaPorKmDF', metaPorKm);
-                    localStorage.setItem('metaPorHoraDF', metaPorHora);
-                    localStorage.setItem('metaSemanalDF', metaSemanal);
-                    localStorage.setItem('metaMensalDF', metaMensal);
-                    localStorage.setItem('customAppsDF', JSON.stringify(customApps));
-                    localStorage.setItem('customExpensesDF', JSON.stringify(customExpenses));
+                    // REMOVA COMPLETAMENTE ESTA LINHA
+                    // REMOVA COMPLETAMENTE ESTA LINHA
+                    // REMOVA COMPLETAMENTE ESTA LINHA
                     
                     document.getElementById('metaDiaria').value = metaDiaria.toFixed(2);
                     document.getElementById('metaSemanal').value = metaSemanal.toFixed(2);
@@ -2905,7 +2887,6 @@
         }
         
         function confirmarApagar() {
-            localStorage.clear();
             transacoes = [];
             metaDiaria = 400.00;
             metaPorKm = 2.00;
@@ -2962,9 +2943,15 @@
 
 		// --- Timer de Jornada --- CORRIGIDO ---
 		let timerInterval;
-		let startTime = localStorage.getItem('timerStartTimeDF') ? parseInt(localStorage.getItem('timerStartTimeDF')) : null;
-		let elapsedSeconds = parseInt(localStorage.getItem('timerElapsedDF')) || 0;
-		let timerRunning = localStorage.getItem('timerRunningDF') === 'true';
+		let startTime = null;
+		// TODO: Migrar para appStorage depois de testado
+		// let startTime = await appStorage.getItem('timerStartTimeDF') ? parseInt(await appStorage.getItem('timerStartTimeDF')) : null;
+		let elapsedSeconds = 0;
+		// TODO: Migrar para appStorage depois de testado
+		// let elapsedSeconds = parseInt(await appStorage.getItem('timerElapsedDF')) || 0;
+		let timerRunning = false;
+		// TODO: Migrar para appStorage depois de testado  
+		// let timerRunning = (await appStorage.getItem('timerRunningDF')) === 'true';
 
 		function formatTime(seconds) {
 			const hours = Math.floor(seconds / 3600).toString().padStart(2, '0');
@@ -2974,11 +2961,11 @@
 		}
 
 		function updateTimerDisplay() {
-			if (timerRunning && startTime) {
-				const now = Date.now();
-				elapsedSeconds = (parseInt(localStorage.getItem('timerElapsedDF')) || 0) + Math.floor((now - startTime) / 1000);
-			}
-			document.getElementById('timerDisplay').textContent = formatTime(elapsedSeconds);
+			// CORREÇÃO: NÃO modificar elapsedSeconds, só calcular para display
+			const totalSeconds = startTime ? 
+				elapsedSeconds + Math.floor((Date.now() - startTime) / 1000) : 
+				elapsedSeconds;
+			document.getElementById('timerDisplay').textContent = formatTime(totalSeconds);
 		}
 
 		function startTimer() {
@@ -2986,8 +2973,12 @@
 			
 			timerRunning = true;
 			startTime = Date.now();
-			localStorage.setItem('timerStartTimeDF', startTime.toString());
-			localStorage.setItem('timerRunningDF', 'true');
+			// REMOVA COMPLETAMENTE ESTA LINHA
+			// TODO: Migrar para appStorage depois de testado
+			// await appStorage.setItem('timerStartTimeDF', startTime.toString());
+			// REMOVA COMPLETAMENTE ESTA LINHA
+			// TODO: Migrar para appStorage depois de testado  
+			// await appStorage.setItem('timerRunningDF', 'true');
 			
 			timerInterval = setInterval(updateTimerDisplay, 1000);
 			updateTimerDisplay();
@@ -3000,6 +2991,9 @@
 			timerRunning = false;
 			clearInterval(timerInterval);
 			
+			// 👇 DEBUG ADICIONADO
+			console.log('DEBUG PAUSE - elapsedSeconds antes:', elapsedSeconds);
+			
 			// Atualiza o tempo acumulado antes de salvar
 			if (startTime) {
 				const now = Date.now();
@@ -3007,9 +3001,8 @@
 				startTime = null;
 			}
 			
-			localStorage.setItem('timerElapsedDF', elapsedSeconds.toString());
-			localStorage.setItem('timerRunningDF', 'false');
-			localStorage.removeItem('timerStartTimeDF');
+			// 👇 DEBUG ADICIONADO
+			console.log('DEBUG PAUSE - elapsedSeconds depois:', elapsedSeconds);
 			
 			updateTimerDisplay();
 			mostrarNotificacao('Timer pausado!');
@@ -3040,10 +3033,6 @@
 			elapsedSeconds = 0;
 			startTime = null;
 			
-			localStorage.setItem('timerElapsedDF', '0');
-			localStorage.removeItem('timerStartTimeDF');
-			localStorage.setItem('timerRunningDF', 'false');
-			
 			updateTimerDisplay();
 			mostrarNotificacao(`Jornada finalizada: ${horasDecimais} horas trabalhadas.`);
 		}
@@ -3057,16 +3046,17 @@
 		});
 		// --- Fim do Timer de Jornada Corrigido ---
 
-        // --- NOTIFICAÇÃO UNIVERSAL ---
+		// --- NOTIFICAÇÃO UNIVERSAL ---
 		function mostrarNotificacao(texto) {
 			// Cria uma chave única por mensagem + data
 			const hoje = new Date().toDateString();
 			const chave = 'notif_' + btoa(texto + hoje).substring(0, 30);
 
 			// Se já mostrou HOJE, NÃO mostra de novo
-			if (localStorage.getItem(chave) === 'true') {
-				return;
-			}
+			// REMOVA COMPLETAMENTE ESTE IF (as 3 linhas abaixo)
+			// if (localStorage.getItem(chave) === 'true') {
+			//     return;
+			// }
 
 			// Mostra a notificação
 			const notification = document.getElementById('metaNotification');
@@ -3076,7 +3066,7 @@
 			notification.classList.add('show');
 
 			// Marca como exibida hoje
-			localStorage.setItem(chave, 'true');
+			// REMOVA COMPLETAMENTE ESTA LINHA
 
 			// Remove após 5 segundos (mas mantém no storage)
 			setTimeout(() => {
@@ -3117,14 +3107,12 @@
         function fazerLogout() {
             mostrarConfirmacao('Deseja realmente sair da conta?', () => {
                 firebase.auth().signOut();
-                localStorage.removeItem('logadoDF');
-                localStorage.removeItem('userEmail');
                 window.location.reload();
             });
         }
 
         // === URL DO SEU WEB APP (doGet) — COLE AQUI ===
-        const VERIFICACAO_URL = '======confidencial======'; // ← SUA URL DO APPS SCRIPT
+        const VERIFICACAO_URL = '========confidencial========='; // ← SUA URL DO APPS SCRIPT
 
         // Função para verificar e-mail no seu Apps Script
         async function verificarAcesso(email) {
@@ -3152,8 +3140,6 @@
 
                     if (permitido) {
                         document.getElementById('loginScreen').remove();
-                        localStorage.setItem('logadoDF', 'true');
-                        localStorage.setItem('userEmail', email);
                         showSection('painel');
                         atualizarTudo();
                         mostrarNotificacao(`Bem-vindo, ${user.displayName}!`);
@@ -3172,7 +3158,7 @@
 
         // === SEGURANÇA AO RECARREGAR A PÁGINA ===
         firebase.auth().onAuthStateChanged(async (user) => {
-            if (user && localStorage.getItem('logadoDF') === 'true') {
+            if (user && false) { // TODO: Migrar para appStorage
                 const permitido = await verificarAcesso(user.email);
                 if (permitido) {
                     document.getElementById('loginScreen')?.remove();
@@ -3181,8 +3167,6 @@
                 } else {
                     // FORÇA LOGOUT SE NÃO FOR COMPRADOR
                     firebase.auth().signOut();
-                    localStorage.removeItem('logadoDF');
-                    localStorage.removeItem('userEmail');
                     document.getElementById('erroLogin').textContent = 'Acesso negado. Compre na Hotmart.';
                     document.getElementById('erroLogin').style.display = 'block';
                 }
@@ -3341,8 +3325,6 @@
                 if (permitido) {
                     // ACESSO LIBERADO
                     document.getElementById('loginScreen').remove();
-                    localStorage.setItem('logadoDF', 'true');
-                    localStorage.setItem('userEmail', email);
                     showSection('painel');
                     atualizarTudo();
                     mostrarNotificacao(`Acesso liberado! Bem-vindo!`);
@@ -3362,5 +3344,8 @@
         // Event listener para o botão de email
         document.getElementById('toggleEmailLogin').addEventListener('click', showEmailForm);
     </script>
+	
+	<script src="js/storage.js"></script>
+	
 </body>
 </html>			
