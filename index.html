@@ -44,12 +44,12 @@
 	<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 	<script>
 		const firebaseConfig = {
-			apiKey: "xxxxxxxxxxxxx",
-            authDomain: "xxxxxxxxxx",
-            projectId: "xxxxxxxxxxx",
-            storageBucket: "xxxxxxxxx",
-            messagingSenderId: "xxxxxxxxxx",
-            appId: "1:121818967215:web:xxxxxxxxxxxxxx"
+			apiKey: "AIzaSyAtgqfFgHEHUNpRmeisR1l_gVi86eQHpRk",
+            authDomain: "driverfinancepro.firebaseapp.com",
+            projectId: "driverfinancepro",
+            storageBucket: "driverfinancepro.firebasestorage.app",
+            messagingSenderId: "121818967215",
+            appId: "1:121818967215:web:05f338b6f35c49e5c9785a"
 		};
 		firebase.initializeApp(firebaseConfig);
 	</script>
@@ -207,11 +207,29 @@
             background: var(--accent); 
             color: var(--bg-primary); 
         }
-        nav button.active { 
-            background: var(--accent); 
-            color: var(--bg-primary);
-            font-weight: bold;
-        }
+		/* Botão Custo KM sempre amarelo */
+		nav button[onclick="showSection('custo-km')"] {
+			transition: all 0.3s;
+		}
+		nav button[onclick="showSection('custo-km')"]:hover,
+		nav button[onclick="showSection('custo-km')"].active {
+			background: #FFD700 !important;
+			color: #000000 !important;
+		}
+		nav button.active { 
+			background: var(--accent); 
+			color: var(--bg-primary);
+			font-weight: bold;
+		}
+		/* Botão Custo KM sempre amarelo - FORÇADO */
+		nav button[onclick*="custo-km"]:hover {
+			background: #FFD700 !important;
+			color: #000000 !important;
+		}
+		nav button[onclick*="custo-km"].active {
+			background: #FFD700 !important;
+			color: #000000 !important;
+		}
         nav button.active::after {
             content: '';
             position: absolute;
@@ -686,6 +704,12 @@
         }
         .theme-btn:hover { transform: scale(1.2); box-shadow: 0 0 8px rgba(0, 0, 0, 0.3); }
         .theme-btn.active { border: 2px solid var(--text-primary); box-shadow: 0 0 10px var(--accent); }
+		/* Botão Custo KM Amarelo */
+		.btn-custo-km:hover,
+		.btn-custo-km.active {
+			background: #FFD700 !important;
+			color: #000000 !important;
+		}
 
         /* ========== ESTILOS PARA ABA NOVIDADES ========== */
         .update-list {
@@ -907,7 +931,7 @@
 
 	<nav id="mainNav">
 		<button onclick="showSection('painel')" class="active">Painel</button>
-		<button onclick="showSection('custo-km')">Custo KM</button> <!-- NOVA POSIÇÃO -->
+		<button onclick="showSection('custo-km')" class="btn-custo-km">Custo KM</button>
 		<button onclick="showSection('transacoes')">Transações</button>
 		<button onclick="showSection('estatisticas')">Estatísticas</button>
 		<button onclick="showSection('imposto')">Imposto de Renda</button>
@@ -934,7 +958,7 @@
             <!-- Meta Diária Pretendida -->
             <div class="meta-diaria card">
                 <h2>Meta Diária Pretendida</h2>
-                <label>Meta Diária (R$): <input type="number" id="metaDiaria" step="10" min="0" value="400.00" oninput="salvarMetaDiaria()"></label>
+                <label>Meta Diária (R$): <input type="number" id="metaDiaria" step="10" min="0" oninput="salvarMetaDiaria()">
                 <progress id="progressoDiario" value="0" max="100"></progress>
                 <p id="progressoTextoDiario">0.0% atingido (R$ 0.00 / R$ 400,00)</p>
             </div>
@@ -945,11 +969,11 @@
                 <div class="meta-inputs">
                     <div class="meta-input-group">
                         <label>Faturamento Mínimo por KM (R$):</label>
-                        <input type="number" id="metaPorKm" step="0.1" min="0.5" max="10" value="2.00" oninput="calcularPlanejamento()">
+                        <input type="number" id="metaPorKm" step="0.1" min="0.5" max="10" oninput="calcularPlanejamento()">
                     </div>
                     <div class="meta-input-group">
                         <label>Faturamento Mínimo por Hora (R$):</label>
-                        <input type="number" id="metaPorHora" step="1" min="5" max="100" value="50" oninput="calcularPlanejamento()">
+                        <input type="number" id="metaPorHora" step="1" min="5" max="100" oninput="calcularPlanejamento()">
                     </div>
                 </div>
                 <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-primary); border-radius: 8px;">
@@ -963,7 +987,7 @@
             <!-- Meta Semanal -->
             <div class="meta-semanal card">
                 <h2>Meta Semanal</h2>
-                <label>Meta Semanal (R$): <input type="number" id="metaSemanal" step="10" min="0" value="1500.00" oninput="salvarMetaSemanal()"></label>
+                <label>Meta Semanal (R$): <input type="number" id="metaSemanal" step="10" min="0" oninput="salvarMetaSemanal()"></label>
                 <progress id="progressoSemanal" value="0" max="100"></progress>
                 <p id="progressoTextoSemanal">0.0% atingido (R$ 0.00 / R$ 1.500,00)</p>
             </div>
@@ -971,7 +995,7 @@
             <!-- Meta Mensal -->
             <div class="meta-mensal card">
                 <h2>Meta Mensal</h2>
-                <label>Meta Mensal (R$): <input type="number" id="metaMensal" step="50" min="0" value="6000.00" oninput="salvarMetaMensal()"></label>
+                <label>Meta Mensal (R$): <input type="number" id="metaMensal" step="50" min="0" oninput="salvarMetaMensal()"></label>
                 <progress id="progressoMensal" value="0" max="100"></progress>
                 <p id="progressoTextoMensal">0.0% atingido (R$ 0.00 / R$ 6.000,00)</p>
             </div>
@@ -1054,15 +1078,15 @@
             <div class="grid">
                 <div>
                     <label>
-                        Uber (R$): <input type="number" id="uber" step="0.01" min="0" placeholder="">
+                        Uber (R$): <input type="text" id="uber" onblur="formatarMoeda(this)">
                     </label>
                     <label>
-                        99 (R$): <input type="number" id="noventaenove" step="0.01" min="0" placeholder="">
+                        99 (R$): <input type="number" id="noventaenove" step="0.01" min="0" min="0">
                     </label>
                     <label>
-                        InDrive (R$): <input type="number" id="indrive" step="0.01" min="0" placeholder="">
+                        InDrive (R$): <input type="number" id="indrive" step="0.01" min="0" min="0">
                     </label>
-                    <label>Particular (R$): <input type="number" id="particular" step="0.01" min="0" placeholder=""></label>
+                    <label>Particular (R$): <input type="number" id="particular" step="0.01" min="0" min="0"></label>
                     
                     <!-- Inputs Dinâmicos para Apps Personalizados -->
                     <div class="dynamic-inputs-container" id="appsInputsContainer">
@@ -1094,14 +1118,14 @@
                         <option value="etanol">Etanol</option>
                         <option value="gnv">GNV</option>
                     </select>
-                    <label>Valor (R$): <input type="number" id="combustivelValor" step="0.01" min="0" placeholder=""></label>
+                    <label>Valor (R$): <input type="number" id="combustivelValor" step="0.01" min="0" min="0"></label>
                 </div>
                 <div>
                     <label>
-                        Aluguel do Carro (R$): <input type="number" id="aluguel" step="0.01" min="0" placeholder="">
+                        Aluguel do Carro (R$): <input type="number" id="aluguel" step="0.01" min="0" min="0">
                     </label>
                     <label>
-                        Alimentação (R$): <input type="number" id="alimentacao" step="0.01" min="0" placeholder="">
+                        Alimentação (R$): <input type="number" id="alimentacao" step="0.01" min="0" min="0">
                     </label>
                     
                     <!-- CONTAINER PARA INPUTS DINÂMICOS DE DESPESAS - ABAIXO DE ALIMENTAÇÃO -->
@@ -1129,17 +1153,17 @@
                 <div class="grid">
                     <div>
                         <label>
-                            Quilometragem (KM): <input type="number" id="quilometragem" step="0.01" min="0" placeholder="">
+                            Quilometragem (KM): <input type="number" id="quilometragem" step="0.01" min="0" min="0">
                         </label>
                     </div>
                     <div>
                         <label>
-                            Total de Corridas: <input type="number" id="totalCorridas" min="0" placeholder="">
+                            Total de Corridas: <input type="number" id="totalCorridas" min="0" min="0">
                         </label>
                     </div>
                     <div>
                         <label>
-                            Horas Trabalhadas: <input type="number" id="horasTrabalhadas" step="0.01" min="0" placeholder="">
+                            Horas Trabalhadas: <input type="number" id="horasTrabalhadas" step="0.01" min="0" min="0">
                         </label>
                     </div>
                 </div>
@@ -1496,11 +1520,11 @@
         // Estado global - ATUALIZADO COM NOVAS VARIÁVEIS
         let transacoes = []; // TODO: Migrar para appStorage
         let charts = {};
-        let metaDiaria = 400.00; // TODO: Migrar para appStorage
-        let metaPorKm = 2.00; // TODO: Migrar para appStorage
-        let metaPorHora = 50.00; // TODO: Migrar para appStorage
-        let metaSemanal = 1500.00; // TODO: Migrar para appStorage
-        let metaMensal = 6000.00; // TODO: Migrar para appStorage
+        let metaDiaria = 0; // TODO: Migrar para appStorage
+        let metaPorKm = 0; // TODO: Migrar para appStorage
+        let metaPorHora = 0; // TODO: Migrar para appStorage
+        let metaSemanal = 00; // TODO: Migrar para appStorage
+        let metaMensal = 0; // TODO: Migrar para appStorage
         let customApps = []; // TODO: Migrar para appStorage
 		let customExpenses = []; // TODO: Migrar para appStorage
         let currentCalendarMonth = new Date().getMonth();
@@ -1549,13 +1573,6 @@
 				updateFontSize(parseInt(fontSizeSlider.value));
 				fontSizeSlider.addEventListener("input", (e) => updateFontSize(parseInt(e.target.value)));
 			}
-
-			// Carregar valores salvos
-			document.getElementById('metaDiaria').value = metaDiaria.toFixed(2);
-			document.getElementById('metaSemanal').value = metaSemanal.toFixed(2);
-			document.getElementById('metaMensal').value = metaMensal.toFixed(2);
-			document.getElementById('metaPorKm').value = metaPorKm;
-			document.getElementById('metaPorHora').value = metaPorHora;
 
 			// Inicializar apps e despesas personalizadas
 			atualizarListaAppsPersonalizados();
@@ -2042,6 +2059,24 @@
             limparForm();
             atualizarTudo();
             mostrarNotificacao('Transação adicionada com sucesso!');
+        }
+
+        // Formatação automática de valores monetários
+		function formatarMoeda(input) {
+            alert('Função chamada!');
+            let valor = input.value.replace(/\D/g, '');
+            if (valor === '' || valor === '0') {
+                input.value = '';
+                return;
+            }
+            valor = valor.replace(/^0+/, '');
+            if (valor === '') {
+                input.value = '';
+                return;
+            }
+            let centavos = parseInt(valor);
+            let reais = (centavos / 100).toFixed(2);
+            input.value = reais;
         }
 
         function limparForm() {
@@ -2853,17 +2888,8 @@
                         metaMensal = dados.metaMensal || metaMensal;
                         customApps = [...new Set([...customApps, ...(dados.customApps || [])])];
                         customExpenses = [...new Set([...customExpenses, ...(dados.customExpenses || [])])];
-                    }
-                    // REMOVA COMPLETAMENTE ESTA LINHA
-                    // REMOVA COMPLETAMENTE ESTA LINHA
-                    // REMOVA COMPLETAMENTE ESTA LINHA
-                    
-                    document.getElementById('metaDiaria').value = metaDiaria.toFixed(2);
-                    document.getElementById('metaSemanal').value = metaSemanal.toFixed(2);
-                    document.getElementById('metaMensal').value = metaMensal.toFixed(2);
-                    document.getElementById('metaPorKm').value = metaPorKm;
-                    document.getElementById('metaPorHora').value = metaPorHora;
-                    
+                    }               
+                   
                     atualizarListaAppsPersonalizados();
                     atualizarListaDespesasPersonalizadas();
                     atualizarInputsApps();
@@ -2888,19 +2914,13 @@
         
         function confirmarApagar() {
             transacoes = [];
-            metaDiaria = 400.00;
-            metaPorKm = 2.00;
-            metaPorHora = 50.00;
-            metaSemanal = 1500.00;
-            metaMensal = 6000.00;
+            metaDiaria = 0;
+            metaPorKm = 0;
+            metaPorHora = 0;
+            metaSemanal = 0;
+            metaMensal = 0;
             customApps = [];
             customExpenses = [];
-            
-            document.getElementById('metaDiaria').value = metaDiaria.toFixed(2);
-            document.getElementById('metaSemanal').value = metaSemanal.toFixed(2);
-            document.getElementById('metaMensal').value = metaMensal.toFixed(2);
-            document.getElementById('metaPorKm').value = metaPorKm;
-            document.getElementById('metaPorHora').value = metaPorHora;
             
             atualizarListaAppsPersonalizados();
             atualizarListaDespesasPersonalizadas();
@@ -3112,7 +3132,7 @@
         }
 
         // === URL DO SEU WEB APP (doGet) — COLE AQUI ===
-        const VERIFICACAO_URL = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; // ← SUA URL DO APPS SCRIPT
+        const VERIFICACAO_URL = 'https://script.google.com/macros/s/AKfycbzNXM1-f0_voJh4lY4u25Ac1dzileJsS9JFwscgTVag51ot-rYfIIlUixtP27tkbwqBkw/exec'; // ← SUA URL DO APPS SCRIPT
 
         // Função para verificar e-mail no seu Apps Script
         async function verificarAcesso(email) {
@@ -3240,7 +3260,6 @@
             }
 
             if (id === 'painel') atualizarPainel();
-            if (id === 'transacoes') atualizarHistorico();
             if (id === 'estatisticas') inicializarGraficos();
             if (id === 'historico') {
                 atualizarCalendario();
