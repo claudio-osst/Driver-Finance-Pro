@@ -44,12 +44,12 @@
 	<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 	<script>
 		const firebaseConfig = {
-			apiKey: "******************************",
-            authDomain: "driverfinancepro.firebaseapp.com",
-            projectId: "***************",
-            storageBucket: "drive**********************ge.app",
-            messagingSenderId: "**********************",
-            appId: "1:*:web:*"
+			apiKey: "**************************",
+            authDomain: "driverfi**************p.com",
+            projectId: "*****************",
+            storageBucket: "driverfi*****************.app",
+            messagingSenderId: "&&&&&&&&&&&",
+            appId: "1:******************:web:*******************"
 		};
 		firebase.initializeApp(firebaseConfig);
 	</script>
@@ -890,41 +890,79 @@
         <p>Controle avançado de faturamento e despesas para motoristas de app</p>
     </header>
 	
-	<!-- TELA DE LOGIN ATUALIZADA -->
-	<div id="loginScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-primary);display:flex;justify-content:center;align-items:center;z-index:9999;flex-direction:column;">
-		<div class="card" style="width:90%;max-width:400px;text-align:center;padding:2rem;">
-			<h2>DriverFinance Pro</h2>
-			<p style="margin-bottom: 1.5rem; color: var(--accent); font-weight: bold;">
-				Use o mesmo e-mail da sua assinatura
-			</p>
-			
-			<!-- Login com Google -->
-			<button id="googleBtn" style="background:#4285F4;color:white;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin:0 auto;width:100%;margin-bottom:1rem;">
-				<img src="https://www.google.com/favicon.ico" width="18" alt="G"> Entrar com Google
-			</button>
-			
-			<div class="login-divider">
-				<span>ou</span>
-			</div>
-			
-			<!-- Login Apenas com Email -->
-			<button id="toggleEmailLogin" class="login-toggle">Entrar com E-mail</button>
-			
-			<!-- Formulário Simples de Email -->
-			<div id="emailLoginForm" class="login-form">
-				<div class="form-group">
-					<label for="loginEmail" style="display:block; text-align:left; margin-bottom:0.5rem; color:var(--text-primary); font-weight:bold;">E-mail:</label>
-					<input type="email" id="loginEmail" placeholder="seu@email.com" style="width:100%;padding:0.75rem;border:2px solid var(--accent);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);">
-				</div>
-				<button id="emailLoginBtn" style="background:var(--accent);color:var(--bg-primary);border:none;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-bottom:0.5rem;">
-					Acessar Minha Conta
+		<!-- TELA DE LOGIN ATUALIZADA -->
+		<div id="loginScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-primary);display:flex;justify-content:center;align-items:center;z-index:9999;flex-direction:column;">
+			<div class="card" style="width:90%;max-width:400px;text-align:center;padding:2rem;">
+				<h2>DriverFinance Pro</h2>
+				<p style="margin-bottom: 1.5rem; color: var(--accent); font-weight: bold;">
+					Use o mesmo e-mail da sua assinatura
+				</p>
+				
+				<!-- Login com Google -->
+				<button id="googleBtn" style="background:#4285F4;color:white;padding:12px 20px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin:0 auto;width:100%;margin-bottom:1rem;">
+					<img src="https://www.google.com/favicon.ico" width="18" alt="G"> Entrar com Google
 				</button>
-				<button class="login-toggle" onclick="showLoginOptions()">Voltar</button>
+				
+				<div class="login-divider">
+					<span>ou</span>
+				</div>
+				
+				<!-- Login Apenas com Email -->
+				<button id="toggleEmailLogin" class="login-toggle">Entrar com E-mail</button>
+				
+				<!-- Formulário Simples de Email -->
+				<div id="emailLoginForm" class="login-form">
+					<div class="form-group">
+						<label for="loginEmail" style="display:block; text-align:left; margin-bottom:0.5rem; color:var(--text-primary); font-weight:bold;">E-mail:</label>
+						<input type="email" id="loginEmail" placeholder="seu@email.com" style="width:100%;padding:0.75rem;border:2px solid var(--accent);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);">
+					</div>
+					<button id="emailLoginBtn" style="background:var(--accent);color:var(--bg-primary);border:none;padding:12px 20px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-bottom:0.5rem;">
+						Acessar Minha Conta
+					</button>
+					<button class="login-toggle" onclick="showLoginOptions()">Voltar</button>
+				</div>
+				
+				<p id="erroLogin" style="color:#ff4444;margin-top:1rem;display:none;"></p>
 			</div>
-			
-			<p id="erroLogin" style="color:#ff4444;margin-top:1rem;display:none;"></p>
 		</div>
-	</div>
+
+		<script type="module">
+			import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+			import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+			import { Filesystem, Directory } from '@capacitor/filesystem';
+
+			// Função de login Google nativo
+			async function loginGoogleNative() {
+				try {
+					const googleUser = await GoogleAuth.signIn();
+					const idToken = googleUser.authentication.idToken;
+
+					const credential = GoogleAuthProvider.credential(idToken);
+					const auth = getAuth();
+					const result = await signInWithCredential(auth, credential);
+
+					console.log('Login Google nativo OK', result.user.email);
+
+					// Salvar usuário localmente
+					await Filesystem.writeFile({
+						path: 'user.json',
+						data: JSON.stringify({
+							uid: result.user.uid,
+							email: result.user.email,
+							loggedIn: true
+						}),
+						directory: Directory.Data,
+						encoding: 'utf8'
+					});
+
+				} catch (err) {
+					console.error('Erro login Google nativo', err);
+				}
+			}
+
+			// Conecta o botão de login Google à função
+			document.getElementById('googleBtn').addEventListener('click', loginGoogleNative);
+		</script>
 
     <!-- Menu Hamburguer Flutuante - AGORA NO TOPO -->
     <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
@@ -3118,7 +3156,7 @@
         }
 
         // === URL DO SEU WEB APP (doGet) — COLE AQUI ===
-        const VERIFICACAO_URL = 'https://script.google.com/**********************************/exec'; // ← SUA URL DO APPS SCRIPT
+        const VERIFICACAO_URL = 'https://scr***********************************************kw/exec'; // ← SUA URL DO APPS SCRIPT
 
         // Função para verificar e-mail no seu Apps Script
         async function verificarAcesso(email) {
@@ -3374,12 +3412,54 @@
 			
 			// Resultado final
 			input.value = reais + ',' + centavos;
-		}
-		
-	</script>
+			}
 
-	<script src="js/config.js"></script>
-	<script type="module" src="js/storage.js"></script>
+			<script type="module">
+			  import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+			  import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+			  import { Filesystem, Directory } from '@capacitor/filesystem';
+
+<!-- Scripts finais do app -->
+<script type="module">
+  import { Capacitor } from '@capacitor/core';
+  import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+  import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+  import { Filesystem, Directory } from '@capacitor/filesystem';
+
+  console.log('Capacitor platform:', Capacitor.getPlatform());
+
+  // Função de login Google nativo
+  async function loginGoogleNative() {
+    try {
+      const googleUser = await GoogleAuth.signIn();
+      const idToken = googleUser.authentication.idToken;
+
+      const credential = GoogleAuthProvider.credential(idToken);
+      const auth = getAuth();
+      const result = await signInWithCredential(auth, credential);
+
+      console.log('Login Google nativo OK', result.user.email);
+
+      // Salvar usuário localmente
+      await Filesystem.writeFile({
+        path: 'user.json',
+        data: JSON.stringify({
+          uid: result.user.uid,
+          email: result.user.email,
+          loggedIn: true
+        }),
+        directory: Directory.Data,
+        encoding: 'utf8'
+      });
+
+    } catch (err) {
+      console.error('Erro login Google nativo', err);
+    }
+  }
+</script>
+
+<script src="capacitor://localhost"></script>
 
 </body>
 </html>
+
