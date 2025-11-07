@@ -44,12 +44,12 @@
 	<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 	<script>
 		const firebaseConfig = {
-			apiKey: "AIzaSyAt==========eQHpRk",
-            authDomain:om",
-            projectId: "drivpro",
-            storageBucket: "driverfinammmmmmmmmmmmmmmp",
-            messagingSenderId: "mmmmmmmmmmmm",
-            appId: "1:121818967215:web:mmmmmmmmm"
+			apiKey: "--------------------",
+            authDomain: "driverfina==============m",
+            projectId: "==============",
+            storageBucket: "driverf==============e.app",
+            messagin",
+            appId: "1:121===============e5c9785a"
 		};
 		firebase.initializeApp(firebaseConfig);
 	</script>
@@ -1081,12 +1081,12 @@
                         Uber (R$): <input type="text" id="uber" onblur="formatarMoeda(this)">
                     </label>
                     <label>
-                        99 (R$): <input type="number" id="noventaenove" step="0.01" min="0" min="0">
+                        99 (R$): <input type="text" id="noventaenove" onblur="formatarMoeda(this)">
                     </label>
                     <label>
-                        InDrive (R$): <input type="number" id="indrive" step="0.01" min="0" min="0">
+                        InDrive (R$): <input type="text" id="indrive" onblur="formatarMoeda(this)">
                     </label>
-                    <label>Particular (R$): <input type="number" id="particular" step="0.01" min="0" min="0"></label>
+                    <label>Particular (R$): <input type="text" id="particular" onblur="formatarMoeda(this)"></label>
                     
                     <!-- Inputs Dinâmicos para Apps Personalizados -->
                     <div class="dynamic-inputs-container" id="appsInputsContainer">
@@ -1118,15 +1118,15 @@
                         <option value="etanol">Etanol</option>
                         <option value="gnv">GNV</option>
                     </select>
-                    <label>Valor (R$): <input type="number" id="combustivelValor" step="0.01" min="0" min="0"></label>
+                    <label>Valor (R$): <input type="text" id="combustivelValor" onblur="formatarMoeda(this)"></label>
                 </div>
                 <div>
-                    <label>
-                        Aluguel do Carro (R$): <input type="number" id="aluguel" step="0.01" min="0" min="0">
-                    </label>
-                    <label>
-                        Alimentação (R$): <input type="number" id="alimentacao" step="0.01" min="0" min="0">
-                    </label>
+					<label>
+						Aluguel do Carro (R$): <input type="text" id="aluguel" onblur="formatarMoeda(this)">
+					</label>
+					<label>
+						Alimentação (R$): <input type="text" id="alimentacao" onblur="formatarMoeda(this)">
+					</label>
                     
                     <!-- CONTAINER PARA INPUTS DINÂMICOS DE DESPESAS - ABAIXO DE ALIMENTAÇÃO -->
                     <div class="dynamic-inputs-container" id="expensesInputsContainer">
@@ -1662,20 +1662,20 @@
             });
         }
 
-        function atualizarInputsApps() {
-            const container = document.getElementById('appsInputsContainer');
-            container.innerHTML = '';
-            
-            customApps.forEach(app => {
-                const inputGroup = document.createElement('div');
-                inputGroup.className = 'dynamic-input-group';
-                inputGroup.innerHTML = `
-                    <label>${app} (R$):</label>
-                    <input type="number" id="app_${app.replace(/\s+/g, '_')}" step="0.01" min="0" placeholder="0.00">
-                `;
-                container.appendChild(inputGroup);
-            });
-        }
+		function atualizarInputsApps() {
+			const container = document.getElementById('appsInputsContainer');
+			container.innerHTML = '';
+			
+			customApps.forEach(app => {
+				const inputGroup = document.createElement('div');
+				inputGroup.className = 'dynamic-input-group';
+				inputGroup.innerHTML = `
+					<label>${app} (R$):</label>
+					<input type="text" id="app_${app.replace(/\s+/g, '_')}" onblur="formatarMoeda(this)" placeholder="0,00">
+				`;
+				container.appendChild(inputGroup);
+			});
+		}
 
         // ========== FUNÇÕES DAS DESPESAS PERSONALIZADAS ==========
 
@@ -3131,7 +3131,7 @@
         }
 
         // === URL DO SEU WEB APP (doGet) — COLE AQUI ===
-        const VERIFICACAO_URL = 'https-------------------------------------------g51ot-rYfIIlUixtP27tkbwqBkw/exec'; // ← SUA URL DO APPS SCRIPT
+        const VERIFICACAO_URL = 'https://script--------------------------xtP27tkbwqBkw/exec'; // ← SUA URL DO APPS SCRIPT
 
         // Função para verificar e-mail no seu Apps Script
         async function verificarAcesso(email) {
