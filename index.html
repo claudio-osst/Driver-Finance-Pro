@@ -955,10 +955,10 @@
                 </div>
             </div>
             
-            <!-- Meta Diária Pretendida -->
+<!-- Meta Diária Pretendida -->
             <div class="meta-diaria card">
                 <h2>Meta Diária Pretendida</h2>
-                <label>Meta Diária (R$): <input type="number" id="metaDiaria" step="10" min="0" oninput="salvarMetaDiaria()">
+                <label>Meta Diária (R$): <input type="text" id="metaDiaria" oninput="aplicarMascaraFantasma(this); salvarMetaDiaria()" placeholder="0,00"></label>
                 <progress id="progressoDiario" value="0" max="100"></progress>
                 <p id="progressoTextoDiario">0.0% atingido (R$ 0.00 / R$ 400,00)</p>
             </div>
@@ -969,11 +969,11 @@
                 <div class="meta-inputs">
                     <div class="meta-input-group">
                         <label>Faturamento Mínimo por KM (R$):</label>
-                        <input type="number" id="metaPorKm" step="0.1" min="0.5" max="10" oninput="calcularPlanejamento()">
+                        <input type="text" id="metaPorKm" oninput="aplicarMascaraFantasma(this); calcularPlanejamento()" placeholder="0,00">
                     </div>
                     <div class="meta-input-group">
                         <label>Faturamento Mínimo por Hora (R$):</label>
-                        <input type="number" id="metaPorHora" step="1" min="5" max="100" oninput="calcularPlanejamento()">
+                        <input type="text" id="metaPorHora" oninput="aplicarMascaraFantasma(this); calcularPlanejamento()" placeholder="0,00">
                     </div>
                 </div>
                 <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-primary); border-radius: 8px;">
@@ -987,7 +987,7 @@
             <!-- Meta Semanal -->
             <div class="meta-semanal card">
                 <h2>Meta Semanal</h2>
-                <label>Meta Semanal (R$): <input type="number" id="metaSemanal" step="10" min="0" oninput="salvarMetaSemanal()"></label>
+                <label>Meta Semanal (R$): <input type="text" id="metaSemanal" oninput="aplicarMascaraFantasma(this); salvarMetaSemanal()" placeholder="0,00"></label>
                 <progress id="progressoSemanal" value="0" max="100"></progress>
                 <p id="progressoTextoSemanal">0.0% atingido (R$ 0.00 / R$ 1.500,00)</p>
             </div>
@@ -995,7 +995,7 @@
             <!-- Meta Mensal -->
             <div class="meta-mensal card">
                 <h2>Meta Mensal</h2>
-                <label>Meta Mensal (R$): <input type="number" id="metaMensal" step="50" min="0" oninput="salvarMetaMensal()"></label>
+                <label>Meta Mensal (R$): <input type="text" id="metaMensal" oninput="aplicarMascaraFantasma(this); salvarMetaMensal()" placeholder="0,00"></label>
                 <progress id="progressoMensal" value="0" max="100"></progress>
                 <p id="progressoTextoMensal">0.0% atingido (R$ 0.00 / R$ 6.000,00)</p>
             </div>
@@ -1450,7 +1450,7 @@
         </footer>
     </main>
 
-    <!-- Modal de Edição -->
+<!-- Modal de Edição -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1461,10 +1461,10 @@
                 <h3 style="color: var(--accent);">Faturamento</h3>
                 <div class="grid">
 				<div>
-					<label>Uber (R$): <input type="number" id="editUber" step="0.01" min="0"></label>
-					<label>99 (R$): <input type="number" id="editNoventaenove" step="0.01" min="0"></label>
-					<label>InDrive (R$): <input type="number" id="editIndrive" step="0.01" min="0"></label>
-					<label>Particular (R$): <input type="number" id="editParticular" step="0.01" min="0"></label>
+					<label>Uber (R$): <input type="text" id="editUber" placeholder="0,00" oninput="formatarMoeda(this)"></label>
+					<label>99 (R$): <input type="text" id="editNoventaenove" placeholder="0,00" oninput="formatarMoeda(this)"></label>
+					<label>InDrive (R$): <input type="text" id="editIndrive" placeholder="0,00" oninput="formatarMoeda(this)"></label>
+					<label>Particular (R$): <input type="text" id="editParticular" placeholder="0,00" oninput="formatarMoeda(this)"></label>
 					
 					<!-- Apps Personalizados no Modal de Edição -->
 					<div id="editAppsInputsContainer">
@@ -1477,7 +1477,6 @@
 					<label>Horas Trabalhadas: <input type="number" id="editHorasTrabalhadas" step="0.01" min="0"></label>
 				</div>
 				</div>
-
                 <h3 style="color: var(--accent);">Despesas</h3>
                 <div class="grid">
                     <div>
@@ -1487,11 +1486,11 @@
                             <option value="etanol">Etanol</option>
                             <option value="gnv">GNV</option>
                         </select>
-                        <label>Valor (R$): <input type="number" id="editCombustivelValor" step="0.01" min="0"></label>
+                        <label>Valor (R$): <input type="text" id="editCombustivelValor" placeholder="0,00" oninput="formatarMoeda(this)"></label>
                     </div>
                     <div>
-                        <label>Aluguel do Carro (R$): <input type="number" id="editAluguel" step="0.01" min="0"></label>
-                        <label>Alimentação (R$): <input type="number" id="editAlimentacao" step="0.01" min="0"></label>
+                        <label>Aluguel do Carro (R$): <input type="text" id="editAluguel" placeholder="0,00" oninput="formatarMoeda(this)"></label>
+                        <label>Alimentação (R$): <input type="text" id="editAlimentacao" placeholder="0,00" oninput="formatarMoeda(this)"></label>
     
 					<!-- Despesas Personalizadas no Modal de Edição -->
 					<div id="editExpensesInputsContainer">
@@ -1499,12 +1498,10 @@
 					</div>
 				</div>
 				</div>
-
                 <!-- Despesas Personalizadas no Modal de Edição -->
                 <div id="editExpensesInputsContainer">
                     <!-- Inputs para despesas personalizadas serão gerados aqui -->
                 </div>
-
                 <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
                     <button type="button" onclick="salvarEdicao()">Salvar Alterações</button>
                     <button type="button" onclick="fecharModalEdicao()">Cancelar</button>
@@ -1538,7 +1535,6 @@
 			const savedTheme = 'dark'; // TODO: Migrar para appStorage
 			document.body.dataset.theme = savedTheme;
 			aplicarTema();
-
 			document.querySelectorAll('.theme-btn').forEach(button => {
 				button.addEventListener('click', () => {
 					const theme = button.dataset.theme;
@@ -1554,7 +1550,6 @@
 			});
 			const activeBtn = document.querySelector(`.theme-btn[data-theme="${savedTheme}"]`);
 			if (activeBtn) activeBtn.classList.add('active');
-
 			const fontSizeMap = ["small", "medium", "large", "extra-large", "xx-large", "xxx-large"];
 			const fontSizeTextMap = ["Pequeno", "Médio", "Grande", "Extra Grande", "Extra Extra Grande", "Extra Extra Extra Grande"];
 			const savedFontSize = "medium"; // TODO: Migrar para appStorage
@@ -1573,16 +1568,13 @@
 				updateFontSize(parseInt(fontSizeSlider.value));
 				fontSizeSlider.addEventListener("input", (e) => updateFontSize(parseInt(e.target.value)));
 			}
-
 			// Inicializar apps e despesas personalizadas
 			atualizarListaAppsPersonalizados();
 			atualizarListaDespesasPersonalizadas();
 			atualizarInputsApps();
 			atualizarInputsDespesas();
-
 			// Calcular planejamento inicial
 			calcularPlanejamento();
-
 			// Filtro de gráficos
 			const periodFilter = document.getElementById('periodFilter');
 			const customDateRange = document.getElementById('customDateRange');
@@ -1592,7 +1584,6 @@
 					if (e.target.value !== 'custom') inicializarGraficos();
 				});
 			}
-
 			// Timer
 			document.getElementById('startTimer').onclick = startTimer;
 			document.getElementById('pauseTimer').onclick = pauseTimer;
@@ -1601,7 +1592,6 @@
             if (timerRunning) {
                 timerInterval = setInterval(updateTimerDisplay, 1000);
             }
-
 			// Login automático
 			if (false) { // TODO: Migrar para appStorage
 				const loginScreen = document.getElementById('loginScreen');
@@ -1611,12 +1601,22 @@
 			} else {
 				showSection("painel");
 			}
-
             // Inicializar calendário
             atualizarCalendario();
             atualizarUltimasTransacoes();
+			
+			// Aplicar formatação de moeda em todos os campos de R$
+			const camposMoeda = ['uber', 'noventaenove', 'indrive', 'particular', 'combustivelValor', 'aluguel', 'alimentacao', 'editUber', 'editNoventaenove', 'editIndrive', 'editParticular', 'editCombustivelValor', 'editAluguel', 'editAlimentacao'];
+			camposMoeda.forEach(id => {
+				const input = document.getElementById(id);
+				if (input) {
+					input.addEventListener('input', function() {
+						formatarMoeda(this);
+					});
+				}
+			});
 		});
-
+		
         // ========== FUNÇÕES DOS APPS PERSONALIZADOS ==========
 
         function adicionarAppPersonalizado() {
@@ -1671,9 +1671,13 @@
 				inputGroup.className = 'dynamic-input-group';
 				inputGroup.innerHTML = `
 					<label>${app} (R$):</label>
-					<input type="text" id="app_${app.replace(/\s+/g, '_')}" onblur="formatarMoeda(this)" placeholder="0,00">
+					<input type="text" id="app_${app.replace(/\s+/g, '_')}" placeholder="0,00">
 				`;
 				container.appendChild(inputGroup);
+				
+				// Adiciona formatação ao input criado
+				const input = document.getElementById(`app_${app.replace(/\s+/g, '_')}`);
+				input.oninput = function() { formatarMoeda(this); };
 			});
 		}
 
@@ -1722,7 +1726,7 @@
             });
         }
 
-        function atualizarInputsDespesas() {
+			function atualizarInputsDespesas() {
             const container = document.getElementById('expensesInputsContainer');
             container.innerHTML = '';
             
@@ -1731,7 +1735,7 @@
                 inputGroup.className = 'dynamic-input-group';
                 inputGroup.innerHTML = `
                     <label>${despesa} (R$):</label>
-                    <input type="number" id="despesa_${despesa.replace(/\s+/g, '_')}" step="0.01" min="0" placeholder="0.00">
+                    <input type="text" id="despesa_${despesa.replace(/\s+/g, '_')}" onblur="formatarMoeda(this)" placeholder="0,00">
                 `;
                 container.appendChild(inputGroup);
             });
@@ -2060,24 +2064,7 @@
             atualizarTudo();
             mostrarNotificacao('Transação adicionada com sucesso!');
         }
-
-        // Formatação automática de valores monetários
-		function formatarMoeda(input) {
-			let valor = input.value.replace(/\D/g, '');
-			if (valor === '' || valor === '0') {
-				input.value = '';
-				return;
-			}
-			valor = valor.replace(/^0+/, '');
-			if (valor === '') {
-				input.value = '';
-				return;
-			}
-			let centavos = parseInt(valor);
-			let reais = (centavos / 100).toFixed(2);
-			input.value = reais;
-		}
-
+		
         function limparForm() {
             // Limpar campos principais
             document.getElementById('uber').value = '';
@@ -3131,7 +3118,7 @@
         }
 
         // === URL DO SEU WEB APP (doGet) — COLE AQUI ===
-        const VERIFICACAO_URL = '*******************************'; // ← SUA URL DO APPS SCRIPT
+        const VERIFICACAO_URL = '***********************************************/exec'; // ← SUA URL DO APPS SCRIPT
 
         // Função para verificar e-mail no seu Apps Script
         async function verificarAcesso(email) {
@@ -3361,6 +3348,34 @@
 
         // Event listener para o botão de email
         document.getElementById('toggleEmailLogin').addEventListener('click', showEmailForm);
+		
+		// Função para formatar valor em R$ durante digitação
+		function formatarMoeda(input) {
+			// Remove tudo que não é número
+			let valor = input.value.replace(/\D/g, '');
+			
+			if (valor === '') {
+				input.value = '';
+				return;
+			}
+			
+			// Garante pelo menos 3 dígitos
+			valor = valor.padStart(3, '0');
+			
+			// Divide em reais e centavos
+			let reais = valor.slice(0, -2);
+			let centavos = valor.slice(-2);
+			
+			// Remove zeros à esquerda
+			reais = reais.replace(/^0+/, '') || '0';
+			
+			// Adiciona ponto nos milhares
+			reais = reais.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+			
+			// Resultado final
+			input.value = reais + ',' + centavos;
+		}
+		
 	</script>
 
 	<script src="js/config.js"></script>
